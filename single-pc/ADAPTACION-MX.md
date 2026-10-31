@@ -80,3 +80,11 @@ Se agregó `tests/mx-single-pc.js` para detectar referencias antiguas en rutas c
 - ⚠️ **No listo para producción**; conservar datos únicamente ficticios.
 
 Regla de seguridad para traducir tickets: la cadena `Order:` es leída por el extractor de folios/códigos de barras del POS original y no debe traducirse hasta actualizar y probar su analizador; esto **no** es una omisión accidental. Lo mismo aplica a claves de órdenes, importaciones y estados internos. La localización debe comprobar que estos mecanismos siguen funcionando.
+
+## Corrección de Configuración durante pruebas manuales (31-10-2026)
+
+A partir de una captura tomada en Microsoft Edge se confirmó que la pantalla de **Administración → Configuración → Reglas de operación** todavía mostraba numerosos textos en inglés. Se tradujeron directamente los rótulos visibles y sus mensajes de ayuda, las pestañas administrativas, la ventana de sucursales y los avisos de respaldo y tarjeta en modo Single-PC. Se conservaron los IDs de los campos, las claves internas y los cálculos.
+
+Se amplió `tests/mx-single-pc.js` para comprobar las nuevas etiquetas y analizar sintácticamente ambos bloques JavaScript. **La comprobación estática pasó**; aún falta revisar visualmente la pantalla con la nueva versión en Edge y hacer pruebas funcionales de los cobros. El cambio no traduce todos los módulos restantes del POS.
+
+**Para actualizar una prueba local:** no basta recargar la página en el navegador; hay que descargar el HTML actualizado desde `desarrollo-mx`, reemplazar el archivo en la **misma carpeta y con el mismo nombre**, tras hacer un respaldo si se registraron datos. No mezclar archivos `main` y `desarrollo-mx`.
