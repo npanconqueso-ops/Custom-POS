@@ -1,197 +1,150 @@
-<h1 align="center">customPOS</h1>
+# CustomPOS — versión en español de México
 
-<p align="center">
-  <strong>Build your own point-of-sale. Download it. Own the code.</strong><br>
-  A free, config-driven POS builder — then customize it locally with <a href="https://claude.com/claude-code">Claude Code</a>.<br>
-  <em>No subscription. No lock-in. Your software, your machine, your data.</em>
-</p>
+**Crea tu propio punto de venta. Descárgalo. Conserva el control de su código.**
 
-<p align="center">
-  <a href="https://github.com/TiredofSleep/Custom-POS/actions/workflows/ci.yml"><img src="https://github.com/TiredofSleep/Custom-POS/actions/workflows/ci.yml/badge.svg" alt="tests"></a>
-</p>
+Sistema de punto de venta gratuito y configurable; se puede personalizar localmente. No exige suscripción ni dependencia de un proveedor para conservar el código y los datos.
 
-<p align="center">
-  <img src="press/02-dashboard.png" alt="customPOS owner dashboard — a day's sales, expenses and net profit" width="760">
-  <br><sub><em>The back-office dashboard: a full day's money story — sales, cost of goods, labor, expenses, and the real bottom line.</em></sub>
-</p>
+**Idiomas:** español (esta documentación) · [English / versión original](README.en.md).
 
-<p align="center">
-  <img src="press/05-pro-dark.png" alt="customPOS front-counter register — a full restaurant menu, themed to the shop's brand" width="720">
-  <br><sub><em>The front counter — a real restaurant menu, the whole accent themed to the shop's own brand color, one self-contained file.</em></sub>
-</p>
+> **Estado de este fork:** la adaptación para una lavandería mexicana se desarrolla únicamente en `desarrollo-mx`. La interfaz de la edición Single-PC tiene traducción inicial, pero **todavía no está completamente traducida ni probada para operación comercial**. El motor genérico, constructor y páginas públicas conservan partes en inglés. No confundir esta rama con un producto listo para vender.
+>
+> **Guías de nuestra edición:** [Manual de la lavandería](single-pc/README.md) · [Plan de adaptación mexicana](single-pc/ADAPTACION-MX.md) · [Índice de documentación](docs/es/README.md).
 
----
+## ¿Qué es CustomPOS?
 
-> **Status: working product, active build.** The public home of customPOS — generalized from a real
-> single-file POS that ran a two-location wet cleaner (now runnable here as the [Single-PC Edition](#the-single-pc-edition--the-real-one-in-one-file)). A landing page, a builder wizard, a
-> [gallery of 24 ready-to-run trade templates](docs/TEMPLATES.md), a full-featured engine, a sync hub, and a
-> payments seam are all live and tested (**104 test suites, zero console errors**). Star/watch to follow along.
-> New here? [**The road here**](docs/HISTORY.md) is the honest history + a whole-platform snapshot.
-> How the origin shop still changes its live POS by asking Claude: [**Built with Claude**](#built-with-claude--a-live-shop-changed-by-asking).
+El proyecto original surgió de un punto de venta real, creado para una tintorería de dos sucursales, y se generalizó para que pueda configurarse para diferentes tipos de negocios.
 
-## What this is
+En lugar de pagar por un programa alojado en servidores ajenos, puedes utilizar un generador que produce un archivo autónomo con tu POS. El archivo se ejecuta en el navegador, guarda datos localmente y no requiere compilación ni conexión a internet para utilizarse en una sola computadora.
 
-Most point-of-sale software is something you *rent*: a monthly subscription, your data on someone else's
-server, and no way to change how it works. **customPOS is the opposite.**
+La idea se parece a un constructor de sitios web, con la diferencia de que recibes y conservas el código de tu aplicación.
 
-You go to the builder, answer a few questions about your business, and download a **single self-contained
-file** that *is* your POS. It runs in a browser, stores its own data, needs no install and no build step —
-and the source code is **yours**. Keep it forever. Change anything. Owe no one.
+## ¿Por qué funciona de esta manera?
 
-Think **Webflow or Squarespace — but you download and own the actual working code**, not just the markup.
+- **Un solo archivo y uso sin conexión:** se puede ejecutar en Chrome sin mantener un servidor propio.
+- **Código que puedes modificar:** la licencia MIT permite utilizar, estudiar y adaptar el proyecto con sus condiciones de atribución.
+- **Personalización con asistencia de IA:** el proyecto incluye `CLAUDE.md` y otras guías para cambiar precios, procesos y comprobantes con herramientas de desarrollo.
+- **Módulos configurables:** se habilitan únicamente los componentes necesarios: inventario, rutas, registro horario, listas de verificación y otros.
 
-## Why it works this way
+## ¿Cómo se financia el proyecto original?
 
-- **One file, zero build, runs offline.** No servers to rent, no dependencies to break. Open it in Chrome and
-  it works.
-- **You own it.** MIT licensed. Download it and it's yours — no account required to keep using it.
-- **Customize it with AI.** The download comes with its own map (a `CLAUDE.md` + code guide) so you can point
-  [Claude Code](https://claude.com/claude-code) at the file and change prices, workflows, receipts, or anything
-  else — in plain English, on your own computer.
-- **Modular.** Turn on only what your business needs — inventory, delivery routes, staff time-clock, checklists,
-  and more — and leave the rest off.
+El software básico se ofrece gratuitamente. Sus creadores contemplan una integración opcional con un procesador de tarjetas, mediante la cual podrían obtener ingresos por el procesamiento contratado por el comercio. No se necesita contratar ese procesador para usar el POS básico.
 
-## How we keep it free
+La arquitectura de pagos está documentada en [`docs/PAYMENTS-MODULE.md`](docs/PAYMENTS-MODULE.md). El diseño separa la información de tarjetas del navegador: las credenciales de procesamiento deben permanecer en el servidor del comercio.
 
-The software is free and always will be. **We make money only when you do** — through an optional, built-in
-card-payment integration. If you choose to accept card payments, you sign up through our processor partner and
-we earn a small share of the processing that already costs you money no matter whose POS you use. Don't want
-card payments? The POS is still 100% free and fully yours. **No paywalls, no feature gates, no subscription.**
+> *El software es libre. El conocimiento es libre.*
 
-> *Software is free. Knowledge is free.* This project is a deliberate stance on how technology — and AI — should
-> serve people: by helping them **own** their tools, not rent them.
+## ¿A qué negocios está dirigido?
 
-The card-payment module the free model rests on has a **validated blueprint** in
-[docs/PAYMENTS-MODULE.md](docs/PAYMENTS-MODULE.md) — a processor-agnostic interface with a certified
-CardConnect/CardPointe reference adapter, PCI-safe by design (**the browser never touches a card number**;
-credentials live only on the business's own server, never in the downloaded file).
+- **Servicios:** lavanderías, tintorerías, arreglos de ropa, talleres y reparación.
+- **Alimentos:** cafeterías, pequeños restaurantes y comercios con preparación de pedidos.
+- **Comercio minorista:** inventario, códigos de barras, comprobantes y ventas.
+- **Servicios con citas:** salones y negocios que necesitan agenda, empleados o comisiones.
 
-## Who it's for
+El proyecto original continúa incorporando nuevas plantillas.
 
-Small businesses that want a real POS without a monthly bill or a vendor holding their data hostage —
-**service shops** (dry cleaners, laundromats, alterations, repair), **food** (cafés, a real burger joint with a
-kitchen display), **retail** (inventory, barcodes, receipts), and **appointment/service** businesses (salons with
-staff, commission, and a booking calendar). More business types to come.
+## Edición Single-PC: un mostrador en un solo archivo
 
-## The Single-PC Edition — the real one, in one file
+El POS de referencia atendió dos tintorerías entre junio y septiembre de 2026. El 30 de septiembre el negocio migró a un sistema más nuevo para varias computadoras. La edición anterior quedó disponible como [`single-pc/ozark-pos-single-pc.html`](single-pc/ozark-pos-single-pc.html).
 
-customPOS was generalized from a real point of sale that ran a two-store wet cleaner from June to September 2026.
-When that shop moved to its multi-computer successor on 30 September, the old version wasn't thrown away: it lives on as the
-**Single-PC Edition** — [`single-pc/ozark-pos-single-pc.html`](single-pc/ozark-pos-single-pc.html), one file that runs
-a dry-cleaning counter on one computer. Landing page: [custompos.org/single-pc.html](https://custompos.org/single-pc.html).
+**Características principales:**
 
-- **Download it, double-click it.** No server, no account, no install, no internet — it makes **zero network
-  requests**, from disk or hosted (a test proves both: [`tests/single-pc.js`](tests/single-pc.js)).
-- **It is the app that ran the shop**, not a rewrite: drop-off → detail → assemble → rack → pickup, house accounts and
-  statements, cash drawers, route board, time clock and payroll. Cash, check, and cards run on your own stand-alone
-  terminal (you type its approval code).
-- **Honest limits.** Texting, emailed statements, a connected card reader, pay links, the customer tracker, photos,
-  QuickBooks and multi-computer sync need a server — they are hidden and labelled, never faked. Data lives only in
-  that browser on that computer; there is a full backup to one file, but **no one-click restore**.
-- Starts empty: no customers, sample staff (PINs in [the read-me](single-pc/README.md)), placeholder store details and
-  a sample dry-cleaner price book. MIT.
-- **Next:** a modular multi-station edition built from the shop's newer system.
+1. **Descargar y abrir.** No requiere instalación, cuenta, internet ni servidor.
+2. **Flujo de trabajo real:** recepción → detalle → preparación → almacenamiento → entrega; clientes, cuentas, cajas, rutas, control horario y reportes.
+3. **Cobros:** efectivo, cheque y registro de tarjetas procesadas con una terminal bancaria independiente.
+4. **Límites claros:** mensajes de texto, envío de estados por correo, lector bancario conectado, enlaces de pago, seguimiento web, fotografías, QuickBooks y sincronización de varias computadoras exigen un servidor y están deshabilitados.
+5. **Datos locales:** hay un respaldo completo en un archivo JSON, pero el original **no tiene restauración con un clic**. Nuestro fork deberá resolverlo antes de utilizarse comercialmente.
 
-Its readable source and its own test gates are in [`reference/ozark-pos/`](reference/ozark-pos/) — see
-[docs/OZARK-REFERENCE.md](docs/OZARK-REFERENCE.md).
+El programa empieza sin clientes ni pedidos reales; incluye empleados y precios de muestra. **Los NIP de demostración son públicos y deben cambiarse.** Consulta [el manual de Single-PC](single-pc/README.md).
 
-## Built with Claude — a live shop, changed by asking
+El código y las pruebas de la aplicación original legible están en [`reference/ozark-pos/`](reference/ozark-pos/), junto con [su explicación técnica](docs/OZARK-REFERENCE.md).
 
-The shop customPOS grew out of, Ozark Cleaners (a two-store wet cleaner in Arkadelphia and Hot Springs, Arkansas), runs
-on point-of-sale software built with Claude, the AI made by Anthropic, and still changes it this way. The owner says what
-he wants in plain words; [Claude Code](https://claude.com/claude-code) changes the live system, writes a proof named after
-the request, and the deploy goes live only if the whole suite passes on the server. The full story, with the real
-requests, the safety rails and the honest limits: **[custompos.org/built-with-claude.html](https://custompos.org/built-with-claude.html)**
-([`built-with-claude.html`](built-with-claude.html)).
+## Desarrollo del sistema original con Claude
 
-As of Oct 12, 2026, counted from the shop's git history, desk logs and test file:
+La tintorería de origen, Ozark Cleaners (Arkadelphia y Hot Springs, Arkansas), utiliza software de punto de venta desarrollado con Claude, de Anthropic. El propietario describe cambios en lenguaje natural y un proceso de desarrollo modifica el sistema, genera pruebas y bloquea despliegues que no superan las comprobaciones.
 
-- **94 commits** to the live system since Oct 1, on **9 of the 12 days** (13 on Oct 12 alone).
-- **1,226 proofs, 0 failed** on Oct 12. Since the Sept 30 switch, 91 proof sections have been added, and 43 of the 50
-  headings that group them quote the owner's request.
-- **48+ builds** named live in the desk logs since the switch, and **at least 6 deploys refused** by the server's full
-  test run, with the shop keeping its running build each time.
-- **2,082 of 2,128** commits since June 20, 2026 carry a `Co-Authored-By: Claude` line.
+El relato y sus limitaciones están disponibles en [el sitio original](https://custompos.org/built-with-claude.html) y en [`built-with-claude.html`](built-with-claude.html).
 
-Money stays with the owner (refunds, voids and credits are owner-only on the shop's server, store credit needs a PIN the
-server checks, and Claude can only suggest a credit), every data fix goes through the app's own functions onto its activity log, and the rule is that builds
-go live at 7 PM Central unless the owner says go (a discipline the sessions follow, not a lock). The shop's own repositories are private, and its current multi-station system is
-not in customPOS yet ([the plan](docs/V2-MODULAR-IMPORT.md)). A test, [`tests/claude-spotlight.js`](tests/claude-spotlight.js),
-holds the page's FAQ markup to its visible FAQ, checks every link, and guards it against private details.
+Según el historial y las bitácoras del desarrollador, al 12 de octubre de 2026 se reportaban:
 
-*Claude is made by Anthropic. customPOS is independent and not affiliated with Anthropic.*
+- 94 commits del sistema utilizado desde el 1 de octubre, distribuidos en 9 de los primeros 12 días.
+- 1,226 comprobaciones sin fallos ese día; 91 nuevas secciones de comprobación después de la migración de septiembre.
+- Más de 48 compilaciones registradas, y al menos 6 despliegues bloqueados por pruebas.
+- 2,082 de 2,128 commits desde el 20 de junio marcados con `Co-Authored-By: Claude`.
 
-## What's built
+En el sistema del negocio original, los reembolsos, anulaciones y créditos están restringidos, y los ajustes de datos pasan por sus registros de actividad. La aplicación actual para varias computadoras **no está incluida** en este repositorio: consulta [el plan de importación modular](docs/V2-MODULAR-IMPORT.md).
 
-- ✅ **Landing page** — [`index.html`](index.html): the customPOS.com front door — the pitch, the honest
-  monetization story, and the trust FAQ every owner asks. One self-contained file, light/dark.
-- ✅ **Config-driven engine** — [`pos.html`](pos.html), one self-contained file. Everything below runs on it **by
-  config alone** — a cleaner, a diner, a shop, and a salon on the exact same code:
-  - **Money:** cash + change, cards (PCI-safe), **house accounts (A/R)**, sales tax, **discounts + coupon codes**,
-    tips + commission, deposits, **split checks**, **refunds/voids**, printable receipts.
-  - **Back office:** **end-of-day Z-report** (by tender / category), **cash-drawer count**, **labor hours**,
-    **sales history** day by day, reorder + A/R statements.
-  - **Operations:** **inventory** (stock, low/out, receive), **barcode scan + search**, **appointments** (book →
-    check-in), **kitchen display** with bump + prep timers, **floor / table plan** (a spatial state machine —
-    tables, salon chairs, auto bays, spa rooms), **quotes/estimates**, **checklists**, capacity/pacing,
-    per-item routing & fan-out, timers/SLAs, flags, modifiers, 86 counts.
-  - **People & customers:** **staff time-clock + PIN + clock-in welcome**, roles/tips/commission, customer
-    profiles + "the usual", **loyalty + gift cards**, **text-when-ready**, status board + customer tracker.
-  - **Worker rights** (defaults tilt toward the worker): **staff scheduling** (weekly grid, OT flag,
-    publish → text), **breaks + real-time earnings** with meal/rest reminders, **time-off requests**, **shift
-    coverage** (no double-book / no hidden OT), **incident reports + 🆘 panic alert**, **tip pooling by hours**,
-    and a **worker portal** — your own schedule, hours, and a **pay estimate with overtime shown at 1.5×**.
-  - **Business health** (survive the hard days): **labor as % of sales** with a high-payroll flag, **gross
-    margin** (cost of goods → real profit), **top items by sales + margin**, **busy-hours** bars to staff the
-    rush, and a **win-back list** that re-invites lapsed regulars in one tap.
-- ✅ **The builder** — [`builder.html`](builder.html): pick a trade, deep-configure clickable workstations & items,
-  **download your POS** plus a generated **`CLAUDE.md`**. A [gallery of **24 starter templates**](docs/TEMPLATES.md)
-  — retail, café, dry cleaner, repair, salon, bar, dispensary, bakery, butcher (by-weight), pizzeria, florist,
-  laundromat, tattoo studio, the real **Hamburger Barn**, a **full-service restaurant** with a floor plan, and
-  more — each ships with its trade's features already on. Many were seeded by AI personas role-playing real
-  owners; **contributing a new one is the easiest way to help.** Live preview.
-- ✅ **Payments** — a processor-agnostic interface. Out of the box, with no processor connected, a card sale is
-  **recorded** on the order (books and drawer stay right) — it never fakes an approval or a card number. The
-  certified CardConnect/CardPointe adapter ([docs/PAYMENTS-MODULE.md](docs/PAYMENTS-MODULE.md)) swaps in on your
-  own server to actually charge cards.
-  Onboarding a new merchant is one command: [`tools/validate-cardconnect.js`](tools/validate-cardconnect.js) runs
-  the full Fiserv Integration-Validation transaction gauntlet against your UAT credentials and prints every
-  retref mapped to the form's boxes (credentials come from env vars — no secrets in the repo).
-- ✅ **Payments service (any POS)** — [`payments/pay-server.js`](payments/pay-server.js): a standalone,
-  zero-dependency card-processing microservice. Gives customPOS *or a third-party POS* certified CardConnect
-  payments behind one neutral REST API (`/charge`, `/refund`, `/void`, `/inquire`, terminal + hosted-tokenizer) —
-  PCI SAQ-A (card data never touches it), a shared-key gate, and a simulator so you can integrate before any
-  merchant account exists. Full guide: [`payments/README.md`](payments/README.md).
-- ✅ **Multi-device hub** — [`hub.js`](hub.js), a zero-dependency Node sync server so several devices (each a
-  different station) share one live POS. Sync is opt-in (`?hub=…`); the downloaded POS is fully local otherwise.
-- ✅ **One-click build** — `node build.js` → `dist/custompos.html`, a single self-contained file that runs the
-  whole builder with **no server** (host it anywhere as customPOS.com).
-- ✅ **Tested** — 58 browser test suites in [`tests/`](tests), each driving the real app, all green with zero
-  console errors.
+*Claude es de Anthropic. CustomPOS es un proyecto independiente y no está afiliado con Anthropic.*
 
-**Next:** the worker portal on personal-device auth, calendar-dated PTO balances, and hosting customPOS.com.
-The whole build story is in [JOURNAL.md](JOURNAL.md).
+## Componentes publicados del proyecto
 
-### Try it
-- **The landing page:** open [`index.html`](index.html).
-- **Just the builder, no server:** `node build.js` then open `dist/custompos.html`.
-- **Builder + engine over http:** `python3 -m http.server 8000` → visit `http://localhost:8000/builder.html`.
-- **The demo engine:** open [`pos.html`](pos.html) directly to play with the demo trades.
-- **The Single-PC Edition:** open [`single-pc/ozark-pos-single-pc.html`](single-pc/ozark-pos-single-pc.html) directly
-  (Chrome or Edge) — a real dry cleaner's POS, one file, one computer.
-- **Share a POS across devices:** `node hub.js` then open `http://<host>:8090/pos.html?hub=http://<host>:8090`
-  on each device.
+### Sitio de presentación
 
-### Run the tests
+[`index.html`](index.html) presenta el proyecto, las condiciones de uso y su propuesta comercial, con temas claro y oscuro.
+
+### Motor configurable
+
+[`pos.html`](pos.html) es el archivo autónomo que permite crear distintas configuraciones de POS. Entre las funciones que documenta el proyecto:
+
+- **Dinero y cobros:** efectivo, cambio, tarjetas a través de integración segura, cuentas de clientes, impuestos, descuentos, cupones, propinas, anticipos, división de cuentas, reembolsos, anulaciones y tickets.
+- **Administración:** corte de caja tipo Z, arqueos, horas trabajadas, historial de ventas, reposición de inventario y estados de cuenta.
+- **Operación:** inventario, códigos de barras, citas, pantalla de cocina, mesas, cotizaciones, listas de control, tiempos de preparación, indicadores, opciones adicionales y disponibilidad.
+- **Personal y clientes:** registro de entrada y salida, NIP, funciones por empleado, comisiones, perfiles, fidelización, tarjetas de regalo, avisos, tablero de estados y rastreo de pedidos.
+- **Derechos laborales:** turnos, descansos, solicitudes de ausencia, reemplazos, incidentes, distribución de propinas y portal de empleados. **Estas reglas no deben suponerse compatibles con la legislación mexicana.**
+- **Salud financiera:** costo de personal respecto de ventas, margen bruto, productos principales, horarios de mayor demanda y clientes inactivos.
+
+### Constructor de sistemas
+
+[`builder.html`](builder.html) permite elegir tipo de negocio, configurar estaciones y artículos y descargar el POS generado con su archivo `CLAUDE.md`.
+
+El [catálogo de 24 plantillas](docs/TEMPLATES.md) contempla comercio, cafetería, tintorería, reparación, salón, bar, panadería, carnicería por peso, pizzería, florería, lavandería de autoservicio, tatuajes, restaurante y más. Incluye vista previa.
+
+### Pagos
+
+La integración de cobros separa el registro de un pago de la autorización real por parte del procesador bancario. Sin un procesador conectado, el POS **solo registra** un cobro; no debe dar a entender que una tarjeta fue autorizada.
+
+El proyecto propone un adaptador CardConnect/CardPointe documentado en [`docs/PAYMENTS-MODULE.md`](docs/PAYMENTS-MODULE.md) y un servicio de pagos independiente [`payments/pay-server.js`](payments/pay-server.js), capaz de gestionar operaciones como `/charge`, `/refund`, `/void` y `/inquire`. Su validación utiliza [`tools/validate-cardconnect.js`](tools/validate-cardconnect.js) con credenciales de entorno, no guardadas en el repositorio.
+
+**Nuestra lavandería:** inicialmente registrará pagos en efectivo, transferencias o cargos ejecutados en una terminal bancaria externa. No activaremos una pasarela estadounidense por defecto.
+
+### Sincronización entre dispositivos
+
+[`hub.js`](hub.js) es el servidor Node opcional para conectar terminales. El uso compartido se activa expresamente con `?hub=…`. **Nuestra lavandería operará inicialmente en una sola computadora**, sin este servidor.
+
+### Compilación
+
+El comando `node build.js` genera `dist/custompos.html`, una versión autónoma que incorpora el constructor. El repositorio incluye pruebas automatizadas en `tests/`.
+
+## Cómo probar el proyecto
+
+- **Sitio de presentación:** abrir `index.html`.
+- **Constructor autónomo:** ejecutar `node build.js` y abrir `dist/custompos.html`.
+- **Constructor y motor mediante HTTP local:** ejecutar `python3 -m http.server 8000` y visitar `http://localhost:8000/builder.html`.
+- **Motor de demostración:** abrir `pos.html`.
+- **Lavandería para una computadora:** abrir `single-pc/ozark-pos-single-pc.html` en Chrome o Edge.
+- **Compartir entre dispositivos:** ejecutar `node hub.js` y abrir `http://<host>:8090/pos.html?hub=http://<host>:8090`.
+
+## Ejecutar las pruebas
+
 ```bash
 npm install
-npx playwright install chromium              # playwright-core ships no browser
+npx playwright install chromium
 export CHROMIUM_EXE="$(node -e "console.log(require('playwright-core').chromium.executablePath())")"
-npm test                                     # runs every tests/*.js, fails on any console error
+npm test
 ```
-CI runs the same suite on every push (see the badge above). A GitHub Pages workflow publishes the landing page +
-builder + demo engine (`.github/workflows/pages.yml`).
 
-## License
+En Windows, el comando para configurar `CHROMIUM_EXE` es diferente. La integración continua original ejecuta las pruebas de navegador y el flujo de GitHub Pages publica el sitio, el constructor y la demostración mediante `.github/workflows/pages.yml`.
 
-[MIT](LICENSE) © Brayden Sanders. Free to use, modify, and redistribute. When you download your POS, it's yours.
+Los cambios de la edición mexicana deben superar, además, pruebas de kilo/pieza, anticipos, saldos, impresión y recuperación.
+
+## Estado de traducción
+
+- El **manual de Single-PC** está en español.
+- El **README principal** está en español en esta rama.
+- La **interfaz Single-PC** cuenta con una capa inicial de traducción; todavía existen mensajes y flujos no cubiertos.
+- La **documentación técnica adicional** y el **constructor genérico** requieren traducción por separado. La traducción no cambia identificadores, código, fórmulas ni interfaces de programación.
+
+## Licencia
+
+[MIT](LICENSE) © Brayden Ross Sanders / 7Site LLC. Se permite usar, modificar y redistribuir el software con los avisos de licencia y atribución correspondientes.
+
+Para cotejar las afirmaciones y la evolución del proyecto consulta [el README original en inglés](README.en.md).
