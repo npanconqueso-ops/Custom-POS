@@ -17,4 +17,18 @@ for(const value of ['wfLbs','ql.lbs','setQuoteLbs','25¢ quarter',"Weight (lb)"]
 assert.match(src,/function saveWFInline\(oid,i\)[\s\S]{0,650}l\.wfKg=lb/);
 assert.match(src,/function quoteWFLine\(ql\)[\s\S]{0,600}ql\.kg/);
 assert.match(src,/function countTotal\(counts\)/);
+// Language map: keep a substantial Spanish vocabulary without modifying internal IDs.
+const dictLine = src.match(/const DICT=(\{[^\n]*\});/);
+assert.ok(dictLine, 'Falta diccionario de traducción es-MX');
+const dict = JSON.parse(dictLine[1]);
+assert.ok(Object.keys(dict).length >= 500, 'El diccionario es-MX perdió traducciones');
+assert.equal(dict['Cancel'], 'Cancelar');
+assert.equal(dict['Backup'], 'Respaldo');
+// The bag/shop ticket must never identify kilograms as pounds.
+assert.ok(src.includes("r+='Peso: '+kg+' kg @ '+money(rate)+'/kg\\n';"),
+  'El ticket interno no debe imprimir libras al cobrar por kg');
+// Syntax-parse each inline script without executing the POS or touching customer data.
+const scripts = [...src.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g)];
+assert.equal(scripts.length, 2, 'La edición debe conservar aplicación + localización autónomas');
+for (const m of scripts) new Function(m[1]);
 console.log('OK: adaptación MX básica y rutas kg/caja presentes. Faltan pruebas operativas de navegador y cobros.');
