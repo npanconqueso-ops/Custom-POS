@@ -2604,21 +2604,21 @@ function singlePcAbout(){
 /* @settings @storage @render — Settings: where the data lives and how to keep it, in place of the hub's cloud-backup panel (whose "Push to cloud" would report a push that never happened). */
 function singlePcSafetyHtml(){
   var t=singlePcLastBackup(); var f=function(ts){ return ts?new Date(ts).toLocaleString([],{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'}):'never'; };
-  return '<h3 style="margin-top:18px">🛟 Where your data lives</h3>'+
-    '<p class="help">Single-PC Edition: everything is saved in <b>this browser on this computer</b> on every change, with a crash-safe local copy. Nothing is sent anywhere, so <b>this computer is the only copy</b> until you download a full backup below and keep it somewhere safe — a USB stick, another computer.</p>'+
-    '<p>Loaded from: <b>'+esc(window.__dataSource==='main'?'primary':(window.__dataSource||'primary'))+'</b>'+(window.__recovered?' <span class="pill ready">recovered ↻</span>':' <span class="pill asm">healthy</span>')+'<br>Last local save: <b>'+f(window.__lastSave)+'</b> · Last full backup downloaded: <b>'+f(t)+'</b></p>';
+  return '<h3 style="margin-top:18px">🛟 Dónde se guardan los datos</h3>'+
+    '<p class="help">Edición de una computadora: todos los cambios se guardan <b>en este navegador y en este equipo</b>, con una copia local de recuperación. No se envían a ningún servidor. <b>Esta computadora es la única copia</b> hasta que descargues y resguardes un respaldo externo.</p>'+
+    '<p>Loaded from: <b>'+esc(window.__dataSource==='main'?'primary':(window.__dataSource||'primary'))+'</b>'+(window.__recovered?' <span class="pill ready">recovered ↻</span>':' <span class="pill asm">healthy</span>')+'<br>Last local save: <b>'+f(window.__lastSave)+'</b> · Último respaldo completo descargado: <b>'+f(t)+'</b></p>';
 }
 /* @settings @sms @render — Settings: texting needs a hub, so this says so instead of offering switches that could only pretend. */
-function singlePcNoTextingHtml(){ return '<h3 style="margin-top:18px">📱 Texting customers</h3><p class="help">Needs the multi-PC edition (a hub with a texting account). This edition never sends a text, and never says that it did.</p>'; }
+function singlePcNoTextingHtml(){ return '<h3 style="margin-top:18px">📱 Mensajes a clientes</h3><p class="help">Requiere la edición para varias computadoras con servicio de mensajes. Esta edición no envía SMS ni simula confirmaciones de envío.</p>'; }
 /* @settings @money @card @render — Settings: cards are run on the shop's own terminal; only the card-fee rule is set here. */
 function singlePcCardSettingsHtml(){ var pc=payCfg(); var sc=pc.surcharge||{};
-  return '<h3 style="margin-top:18px">💳 Card payments</h3>'+
-    '<p class="help">Run the card on <b>your own card terminal</b> (any stand-alone machine or phone reader), then type the <b>approval code</b> it gives you — the POS records the payment with that code. This edition never talks to a card processor, so it never charges a card by itself.</p>'+
+  return '<h3 style="margin-top:18px">💳 Pagos con tarjeta</h3>'+
+    '<p class="help">Realiza el cobro en <b>tu propia terminal bancaria</b> y después ingresa el <b>código de autorización</b>. El sistema solo registra el cobro: esta edición no se conecta al banco ni realiza cargos directamente.</p>'+
     '<input type="hidden" id="set_payprov" value="manual"><input type="hidden" id="set_paysandbox" value="1">'+
-    '<label style="display:inline-flex;align-items:center;gap:6px;font-weight:600;margin-top:10px"><input type="checkbox" id="set_scon" style="width:auto" '+(sc.enabled?'checked':'')+'> Pass the card fee to customers (surcharge)</label>'+
-    '<div class="grid2"><div><label>Surcharge % <span class="muted">(max 3%)</span></label><input id="set_scpct" type="number" step="0.1" min="0" max="3" value="'+(sc.pct!=null?sc.pct:3)+'"></div><div><label>Fee label on receipt</label><input id="set_sclabel" value="'+esc(sc.label||'Card fee')+'"></div></div>'+
-    '<p class="help">⚠ Surcharging is regulated: credit cards only (never debit), capped at 3%, posted signage, notice to your processor, and restricted in some states. Check your state\'s rules first.</p>'+
-    '<div class="row" style="justify-content:flex-end;margin-top:6px"><button class="btn green" onclick="saveCardSettings()">Save card settings</button></div>';
+    '<label style="display:inline-flex;align-items:center;gap:6px;font-weight:600;margin-top:10px"><input type="checkbox" id="set_scon" style="width:auto" '+(sc.enabled?'checked':'')+'> Trasladar al cliente el cargo por tarjeta</label>'+
+    '<div class="grid2"><div><label>Cargo adicional (%) <span class="muted">(máximo técnico 3%; verificar legalidad)</span></label><input id="set_scpct" type="number" step="0.1" min="0" max="3" value="'+(sc.pct!=null?sc.pct:3)+'"></div><div><label>Concepto del cargo en el ticket</label><input id="set_sclabel" value="'+esc(sc.label||'Card fee')+'"></div></div>'+
+    '<p class="help">⚠ Esta opción proviene de la versión estadounidense. No habilitar cargos por tarjeta sin consultar las reglas del procesador y la normativa mexicana aplicable.</p>'+
+    '<div class="row" style="justify-content:flex-end;margin-top:6px"><button class="btn green" onclick="saveCardSettings()">Guardar configuración de tarjetas</button></div>';
 }
 /* @money @card @pickup — a card run on the shop's own terminal: the cashier types the approval code it gave. Reached only after runPresentCharge's double-charge interlock, and booked through the caller's own approval path. */
 function singlePcCard(cents, opts){ opts=opts||{}; window.__spcCard={cents:cents, opts:opts}; var amt=money(cents/100);
@@ -18450,11 +18450,11 @@ function adminGraphs(){ if(!can('reports')){ denyMsg(); return ''; }
   return h; }
 /* @screen @admin — the Admin shell: tab strip + dispatch; each tab body is its own function and permission-gates itself. */
 function renderAdmin(){
-  if(!can('admin')) return backBar('Administrator')+'<div class="panel"><p>🔒 The admin area is for <b>managers and owners</b>.</p></div>';
+  if(!can('admin')) return backBar('Administración')+'<div class="panel"><p>🔒 El área de administración es exclusiva para <b>encargados y propietarios</b>.</p></div>';
   const tabAbility={dash:'admin',graphs:'reports',ar:'reports',prices:'prices',upcharges:'prices',customers:'customers',feedback:'reports',voidreq:'reset',refundreq:'reset',devices:'reports',reports:'reports',inventory:'reports',checklist:'admin',supplies:'reports',activity:'reports',hsl:'reports',theft:'reports',employees:'employees',payroll:'reports',printing:'settings',settings:'settings',integ:'reset',production:'admin'};   /* ⚠️ 'graphs' MUST be here — its absence made line-below's "unknown tab → dash" guard bounce every click on Graphs back to the Dashboard (owner 2026-09-09 "the graphs tab is not clickable"). Every tab in the `tabs` list needs a tabAbility entry or it is un-clickable. */
   var _vrp=(DB.voidRequests||[]).filter(function(r){return r.status==='pending';}).length;
   var _rrp=(DB.refundRequests||[]).filter(function(r){return r.status==='pending';}).length;
-  let tabs=[['dash','📊 Dashboard'],['graphs','📊 Graphs'],['ar','💳 A/R'],['prices','🏷️ Price Book'],['upcharges','➕ Upcharges'],['customers','👥 Customers'],['feedback','💬 Feedback'],['voidreq','🗑 Void'+(_vrp?' ('+_vrp+')':'')],['refundreq','↩ Refunds'+(_rrp?' ('+_rrp+')':'')],['devices','📱 Devices'],['reports','📈 Reports'],['inventory','📋 Inventory'],['production','🎒 Production'],['checklist','✅ Checklists'],['supplies','🧴 Supplies'],['activity','🧾 Activity'],['hsl','🏷️ HSL'],['theft','🛡️ Theft Watch'],['employees','🧑‍🔧 Employees'],['payroll','⏱ Payroll'],['printing','🖨 Printing'],['settings','⚙ Settings'],['integ','🔐 Integrations']];
+  let tabs=[['dash','📊 Resumen'],['graphs','📊 Gráficas'],['ar','💳 Cuentas por cobrar'],['prices','🏷️ Catálogo de precios'],['upcharges','➕ Cargos adicionales'],['customers','👥 Clientes'],['feedback','💬 Comentarios'],['voidreq','🗑 Anulaciones'+(_vrp?' ('+_vrp+')':'')],['refundreq','↩ Reembolsos'+(_rrp?' ('+_rrp+')':'')],['devices','📱 Dispositivos'],['reports','📈 Reportes'],['inventory','📋 Inventario'],['production','🎒 Producción'],['checklist','✅ Listas de verificación'],['supplies','🧴 Insumos'],['activity','🧾 Actividad'],['hsl','🏷️ HSL'],['theft','🛡️ Control de irregularidades'],['employees','🧑‍🔧 Empleados'],['payroll','⏱ Nómina'],['printing','🖨 Impresión'],['settings','⚙ Configuración'],['integ','🔐 Integraciones']];
   tabs=tabs.filter(t=>can(tabAbility[t[0]]||'admin'));
   let tab=state.params.tab||'dash';
   if(!tabAbility[tab]) tab='dash';   // unknown tab (stale link) → dashboard, never crash
@@ -18462,7 +18462,7 @@ function renderAdmin(){
   /* ⚠️ this was a HAND-ROLLED COPY of backBar — a 45th screen with the same hard-coded jump to Home, kept
      separate only because it appends the role to the title. backBar's title already takes markup, so the
      copy had no reason to exist and drifted the moment backBar was fixed. */
-  let h=backBar('Administrator <span class="muted" style="font-size:13px">· '+esc(roleLabel())+'</span>');
+  let h=backBar('Administración <span class="muted" style="font-size:13px">· '+esc(roleLabel())+'</span>');
   h+=adminFlagsHtml();   // ⚠ the flags that used to live on Home (owner 7/29: home stays clean)
   h+='<div class="tabbar" style="margin-top:12px">'+tabs.map(t=>'<div class="tab '+(tab===t[0]?'on':'')+'" onclick="'+(t[0]==='inventory'?'go(\'inventory\')':'go(\'admin\',{tab:\''+t[0]+'\'})')+'">'+t[1]+'</div>').join('')+'</div>';   // 📋 Inventory opens the full bag-level screen directly (owner 2026-08-22 "i did not get the inventory update" — the intro tab hid it)
   h+='<div class="panel" style="margin-top:0">'+({dash:adminDash,graphs:adminGraphs,ar:arDashBody,prices:adminPrices,upcharges:adminUpcharges,customers:adminCustomers,feedback:adminFeedback,voidreq:adminVoidReq,refundreq:adminRefundReq,devices:adminDevices,reports:adminReports,inventory:adminInventory,production:adminProduction,checklist:adminChecklist,supplies:adminSupplies,activity:adminActivity,hsl:adminHslLog,theft:adminTheftWatch,employees:adminEmployees,payroll:adminPayroll,printing:adminPrinting,settings:adminSettings,integ:adminIntegrations}[tab]())+'</div>';
@@ -20856,19 +20856,19 @@ function savePrefLists(){ if(!can('settings')){ denyMsg(); return; } const s=S()
 function saveRules(){ if(!can('settings')){ denyMsg(); return; } const s=S(); s.splitSize=Math.max(1,Number(val('set_split'))||5); s.washFoldRate=Number(val('set_wf'))||0; s.washFoldLoad=Number(val('set_wfload'))||30; s.promiseDays=Math.max(0,Number(val('set_promise'))||7); s.rushDays=Math.max(0,Number(val('set_rush'))||1); s.billingDay=Math.min(28,Math.max(1,Number(val('set_bill'))||1)); s.acctHoldDays=Math.max(0,Number(val('set_hold'))||0); s.rackMode=val('set_rack'); s.reminderDays=numList(val('set_remind')); s.storageDays=numList(val('set_storaged')); s.storagePct=Number(val('set_storagepct'))||0; s.stainSeconds=Math.max(5,Number(val('set_stain'))||60); var _ac=document.getElementById('set_acon'); s.autoClose={on:!!(_ac&&_ac.checked), time:(val('set_actime')||'21:00')}; s._t=hlcNow(); saveDB(); toast('Reglas guardadas'); go('admin',{tab:'settings'}); }
 /* @store */
 function editStore(id){ if(!can('settings')){ denyMsg(); return; } const s=id?storeById(id):{name:'',zip:'',tax:0.095};
-  modal('<h2>'+(id?'Edit store':'Add store')+'</h2><label>Name</label><input id="snm" value="'+esc(s.name)+'" placeholder="e.g. Riverside">'+
-    '<label>Street address</label><input id="sadr" value="'+esc(s.addr||'')+'" placeholder="200 Market St. Ste. A">'+
-    '<label>ZIP</label><input id="szip" value="'+esc(s.zip)+'">'+'<label>Phone</label><input id="sphone" value="'+esc(s.phone||'')+'" placeholder="(555) 555-0100">'+
-    '<label>Tax rate %</label><input id="stx" type="number" step="0.01" value="'+(s.tax*100)+'">'+
-    '<label>🖨 Printer / paper <span class="muted">(assembly PC shows this so staff use the right printer)</span></label><input id="spaper" value="'+esc(s.paper||'')+'" placeholder="e.g. white paper">'+
-    '<div class="row" style="justify-content:space-between;margin-top:12px"><button class="back" onclick="closeModal()">Cancel</button><div>'+(id&&S().stores.length>1?'<button class="back" onclick="delStore('+id+')">🗑 Delete</button> ':'')+'<button class="btn green" onclick="saveStore('+id+')">Save</button></div></div>');
+  modal('<h2>'+(id?'Editar sucursal':'Agregar sucursal')+'</h2><label>Nombre</label><input id="snm" value="'+esc(s.name)+'" placeholder="Ej. Lavandería Centro">'+
+    '<label>Dirección</label><input id="sadr" value="'+esc(s.addr||'')+'" placeholder="Calle Ejemplo 123">'+
+    '<label>Código postal</label><input id="szip" value="'+esc(s.zip)+'">'+'<label>Teléfono</label><input id="sphone" value="'+esc(s.phone||'')+'" placeholder="55 1234 5678">'+
+    '<label>Impuesto (%)</label><input id="stx" type="number" step="0.01" value="'+(s.tax*100)+'">'+
+    '<label>🖨 Impresora / papel <span class="muted">(selecciona la impresora y el tipo de papel adecuados)</span></label><input id="spaper" value="'+esc(s.paper||'')+'" placeholder="Ej. papel blanco">'+
+    '<div class="row" style="justify-content:space-between;margin-top:12px"><button class="back" onclick="closeModal()">Cancelar</button><div>'+(id&&S().stores.length>1?'<button class="back" onclick="delStore('+id+')">🗑 Eliminar</button> ':'')+'<button class="btn green" onclick="saveStore('+id+')">Guardar</button></div></div>');
 }
 /* @storage */
-function saveStore(id){ const name=(val('snm')||'').trim(); if(!name){ toast('Enter a store name'); return; } const tax=(Number(val('stx'))||0)/100; const zip=(val('szip')||'').trim(); const addr=(val('sadr')||'').trim(); const paper=(val('spaper')||'').trim();
+function saveStore(id){ const name=(val('snm')||'').trim(); if(!name){ toast('Ingresa el nombre de la sucursal'); return; } const tax=(Number(val('stx'))||0)/100; const zip=(val('szip')||'').trim(); const addr=(val('sadr')||'').trim(); const paper=(val('spaper')||'').trim();
   if(id){ const s=storeById(id); s.name=name; s.addr=addr; s.zip=zip; s.tax=tax; s.paper=paper; s.phone=(val('sphone')||'').trim(); } else { const nid=Math.max.apply(null,S().stores.map(s=>s.id))+1; S().stores.push({id:nid,name:name,addr:addr,zip:zip,tax:tax,paper:paper,phone:(val('sphone')||'').trim()}); } S()._t=hlcNow();   // 🔒 TAX RATE lives here — a reverted store edit is a books error
   saveDB(); closeModal(); go('admin',{tab:'settings'}); }
 /* @store */
-function delStore(id){ if(S().stores.length<=1) return; if(!confirm('Delete this store? Orders already tagged to it keep their data.')) return; S().stores=S().stores.filter(s=>s.id!==id); S()._t=hlcNow(); if(state.store===id) state.store=S().stores[0].id; saveDB(); closeModal(); go('admin',{tab:'settings'}); }
+function delStore(id){ if(S().stores.length<=1) return; if(!confirm('¿Eliminar esta sucursal? Los pedidos ya registrados conservarán su información.')) return; S().stores=S().stores.filter(s=>s.id!==id); S()._t=hlcNow(); if(state.store===id) state.store=S().stores[0].id; saveDB(); closeModal(); go('admin',{tab:'settings'}); }
 
 /* ============================ MODAL / UTIL ============================ */
 /* @render — a blocking dialog; it is also what holds off the auto-updater, so an open modal means work in progress. */
