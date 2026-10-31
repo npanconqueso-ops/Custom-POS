@@ -31,4 +31,19 @@ assert.ok(src.includes("r+='Peso: '+kg+' kg @ '+money(rate)+'/kg\\n';"),
 const scripts = [...src.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g)];
 assert.equal(scripts.length, 2, 'La edición debe conservar aplicación + localización autónomas');
 for (const m of scripts) new Function(m[1]);
+// Spanish labels must be embedded in the rendered Settings screen, not only in docs.
+const settingsSection = src.slice(src.indexOf('function adminSettings(){'), src.indexOf('/* 💾 OWN YOUR DATA', src.indexOf('function adminSettings(){')));
+for (const label of [
+  'Reglas de operación', 'Piezas por bolsa dividida', 'Lavado y secado (MXN/kg)',
+  'Precio fijo por carga ($ MXN)', 'Días para la entrega',
+  'Días para servicio urgente', 'Forma de asignar estantes',
+  'Días para recordatorios', 'Cargo por almacenaje (%)',
+  'Cierre automático de bolsas', 'Guardar reglas', 'Guardar listas'
+]) assert.ok(settingsSection.includes(label), 'Falta etiqueta de configuración: ' + label);
+const adminSection = src.slice(src.indexOf('function renderAdmin(){'), src.indexOf('/* 💬 Customer feedback',src.indexOf('function renderAdmin(){')));
+for (const label of ['📊 Resumen', '🏷️ Catálogo de precios', '👥 Clientes', '⚙ Configuración'])
+  assert.ok(adminSection.includes(label), 'Falta traducción de administración: '+label);
+const storeEditor = src.slice(src.indexOf('function editStore('),src.indexOf('/* ============================ MODAL / UTIL',src.indexOf('function editStore(')));
+for (const label of ['Editar sucursal', 'Agregar sucursal','Nombre</label>','Impuesto (%)</label>','Cancelar</button>'])
+  assert.ok(storeEditor.includes(label), 'Falta traducción de sucursal: '+label);
 console.log('OK: adaptación MX básica y rutas kg/caja presentes. Faltan pruebas operativas de navegador y cobros.');
