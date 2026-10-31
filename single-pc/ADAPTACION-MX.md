@@ -64,3 +64,19 @@ Se modificó `single-pc/ozark-pos-single-pc.html` sobre `desarrollo-mx` para usa
 **Compatibilidad de datos:** los campos originales `wfLbs` / `lbs` **no se convierten automáticamente**. No importar archivos JSON de la edición estadounidense en esta versión. Si fuera necesario, crear primero una migración explícita y verificada. La nueva versión todavía tiene múltiples textos en inglés y precios de demostración estadounidenses. **No usar en producción.**
 
 Se agregó `tests/mx-single-pc.js` para detectar referencias antiguas en rutas críticas; su presencia no demuestra que todas las pruebas se hayan ejecutado. Faltan pruebas de interfaz, operaciones completas, fiscalidad y respaldo/restauración.
+
+## Etapa de localización (31-10-2026)
+
+- ✅ Traducción principal del repositorio en `README.md`; se conservó `README.en.md` con la versión inglesa.
+- ✅ Traducción del manual Single-PC en `single-pc/README.md`; original en `single-pc/README.en.md`.
+- ✅ Índice, glosario y guías de México en `docs/es/`.
+- ✅ Capa de localización visual en el HTML autónomo con **521 traducciones exactas** para controles y etiquetas; no modifica claves de base de datos.
+- ✅ Etiquetas iniciales de comprobantes (recibos, bolsas, cotización, estados y listas) traducidas.
+- ✅ Se corrigió la unidad en el ticket interno para mostrar `kg` con tarifa por kg.
+- ✅ Se verificó sintaxis JavaScript de los dos bloques embebidos mediante el analizador V8, sin ejecutar la aplicación.
+- ✅ Se añadió guardia estática en `tests/mx-single-pc.js` para diccionario, ticket kg y sintaxis de scripts.
+- ⚠️ **Traducción no finalizada:** permanecen mensajes compuestos, textos en diálogos nativos, reportes y flujos secundarios en inglés. El constructor, motor configurable y otros documentos técnicos también necesitan traducción.
+- ⚠️ **Pruebas pendientes:** pruebas reales del navegador, flujos de cobro, devolución, ticket físico, respaldo/restauración y cobertura del resto de los textos. Al momento de revisar la API no había ejecuciones de Actions visibles en la rama de este fork.
+- ⚠️ **No listo para producción**; conservar datos únicamente ficticios.
+
+Regla de seguridad para traducir tickets: la cadena `Order:` es leída por el extractor de folios/códigos de barras del POS original y no debe traducirse hasta actualizar y probar su analizador; esto **no** es una omisión accidental. Lo mismo aplica a claves de órdenes, importaciones y estados internos. La localización debe comprobar que estos mecanismos siguen funcionando.
