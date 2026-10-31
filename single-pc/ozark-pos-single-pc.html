@@ -20686,43 +20686,43 @@ function emailPayrollSend(how){ const to=(val('acctTo')||'').trim(), cc=(val('ac
 function payrollPDF(ref){ printHTMLDoc('Ozark Payroll '+payrollRange(payPeriodOf(ref)), payrollBody(ref), true); }
 /* @screen @admin @settings — the shop itself: stores, tax, promise days, and how this workstation behaves. */
 function adminSettings(){
-  let h='<h2>⚙ Settings</h2>';
-  h+='<p>🖥 <b>This workstation:</b> '+esc(wsName())+' <button class="back" onclick="setWSName()">rename</button></p>';
-  h+='<p>🔑 <b>Hub access key (this device):</b> '+(hubKey()?'•••• set':'<span class="muted">not set</span>')+' <button class="back" onclick="setHubKey()">set</button> <span class="help">Optional. If the plant hub requires a key, only devices with the matching key can read/write data.</span></p>';
-  h+='<p>🏪 <b>Default store for new quicks (this device):</b> <select onchange="setHomeStore(this.value)">'+S().stores.map(function(s){return '<option value="'+s.id+'"'+(homeStore()==s.id?' selected':'')+'>'+esc(s.name)+'</option>';}).join('')+'</select> <span class="help">New customers &amp; quick drop-offs default to this store. Searching &amp; assembling still cover all stores.</span></p>';
-  h+='<p>🖨 <b>Local Print Agent (this device):</b> '+(useAgentHere()?'<b style="color:#2e7d32">ON</b>':'<span class="muted">off</span>')+' <button class="back" onclick="setUseAgent('+(useAgentHere()?'false':'true')+')">'+(useAgentHere()?'turn off':'turn on')+'</button> <span class="help">Auto-prints tickets/receipts through this PC\'s Print Agent (no print box) — needs the agent running on this computer. The assembly PC (🏢 All stores) always uses its agent; leave this off on stations without one.</span></p>';
-  h+='<p id="agStatus" style="margin:2px 0 2px 22px"><span class="muted">checking this PC\'s print agent…</span></p>';
-  h+='<p style="margin:0 0 6px 22px"><button class="back" onclick="agentTestPrint()">🖨 Print a test ticket (real barcode)</button> <span class="help">Prints a self-test with a scannable barcode via this PC\'s agent. If it errors or the barcode looks blocky, see PRINT-AGENT-RUNBOOK.md.</span></p>';
+  let h='<h2>⚙ Configuración</h2>';
+  h+='<p>🖥 <b>Esta computadora:</b> '+esc(wsName())+' <button class="back" onclick="setWSName()">cambiar nombre</button></p>';
+  h+='<p>🔑 <b>Clave del servidor (este equipo):</b> '+(hubKey()?'•••• set':'<span class="muted">sin configurar</span>')+' <button class="back" onclick="setHubKey()">set</button> <span class="help">Opcional. Solo los equipos con la clave correcta pueden acceder a los datos del servidor.</span></p>';
+  h+='<p>🏪 <b>Sucursal predeterminada para nuevas recepciones:</b> <select onchange="setHomeStore(this.value)">'+S().stores.map(function(s){return '<option value="'+s.id+'"'+(homeStore()==s.id?' selected':'')+'>'+esc(s.name)+'</option>';}).join('')+'</select> <span class="help">Los clientes nuevos y las recepciones rápidas se asignan aquí. La búsqueda y preparación abarcan todas las sucursales.</span></p>';
+  h+='<p>🖨 <b>Agente de impresión local (este equipo):</b> '+(useAgentHere()?'<b style="color:#2e7d32">ON</b>':'<span class="muted">off</span>')+' <button class="back" onclick="setUseAgent('+(useAgentHere()?'false':'true')+')">'+(useAgentHere()?'desactivar':'activar')+'</button> <span class="help">Imprime tickets automáticamente con el agente local. Requiere tenerlo instalado y activo en esta computadora; déjalo desactivado si no se utiliza.</span></p>';
+  h+='<p id="agStatus" style="margin:2px 0 2px 22px"><span class="muted">comprobando el agente de impresión local…</span></p>';
+  h+='<p style="margin:0 0 6px 22px"><button class="back" onclick="agentTestPrint()">🖨 Imprimir ticket de prueba (código de barras real)</button> <span class="help">Imprime una prueba con código de barras mediante el agente local. Si hay errores, revisa PRINT-AGENT-RUNBOOK.md.</span></p>';
   setTimeout(agentStatusCheck,120);
-  h+='<p>🆘 <b>Remote-support link:</b> '+(S().supportUrl?esc(S().supportUrl):'<span class="muted">not set</span>')+' <button class="back" onclick="setSupportUrl()">set</button></p>';
-  h+='<p>📧 <b>Marketing sender:</b> '+esc(S().senderEmail||'(not set)')+' <button class="back" onclick="setSenderEmail()">set</button> <span class="help">App Password stays on the plant hub, not here.</span></p>';
-  h+='<div class="row" style="justify-content:space-between;margin-top:6px"><h3 style="margin:0">Stores &amp; tax</h3><button class="back" onclick="editStore(0)">➕ Add store</button></div><table><tr><th>Store</th><th>Address</th><th>ZIP</th><th class="right">Tax</th><th></th></tr>';
-  S().stores.forEach(s=>h+='<tr><td>'+esc(s.name)+'</td><td>'+esc(s.addr||'')+'</td><td>'+esc(s.zip)+'</td><td class="right">'+(s.tax*100).toFixed(2)+'%</td><td class="right"><button class="back" onclick="editStore('+s.id+')">edit</button></td></tr>');
+  h+='<p>🆘 <b>Enlace de soporte remoto:</b> '+(S().supportUrl?esc(S().supportUrl):'<span class="muted">sin configurar</span>')+' <button class="back" onclick="setSupportUrl()">set</button></p>';
+  h+='<p>📧 <b>Remitente de correos:</b> '+esc(S().senderEmail||'(sin configurar)')+' <button class="back" onclick="setSenderEmail()">set</button> <span class="help">La contraseña de aplicación se guarda en el servidor, no aquí.</span></p>';
+  h+='<div class="row" style="justify-content:space-between;margin-top:6px"><h3 style="margin:0">Sucursales e impuestos</h3><button class="back" onclick="editStore(0)">➕ Agregar sucursal</button></div><table><tr><th>Sucursal</th><th>Dirección</th><th>Código postal</th><th class="right">Impuesto</th><th></th></tr>';
+  S().stores.forEach(s=>h+='<tr><td>'+esc(s.name)+'</td><td>'+esc(s.addr||'')+'</td><td>'+esc(s.zip)+'</td><td class="right">'+(s.tax*100).toFixed(2)+'%</td><td class="right"><button class="back" onclick="editStore('+s.id+')">editar</button></td></tr>');
   h+='</table>';
-  h+='<h3 style="margin-top:16px">Preference buttons &amp; lists <span class="muted" style="font-size:12px">(comma-separated)</span></h3>';
-  h+='<label>Starch options</label><input id="set_starch" value="'+esc((S().starch||[]).join(', '))+'">';
-  h+='<label>Pants options</label><input id="set_pants" value="'+esc((S().pants||[]).join(', '))+'">';
-  h+='<label>Spotting options</label><input id="set_spotting" value="'+esc((S().spotting||[]).join(', '))+'">';
-  h+='<label>Detail colors</label><input id="set_colors" value="'+esc((S().colors||[]).join(', '))+'">';
-  h+='<label>Detail patterns</label><input id="set_patterns" value="'+esc((S().patterns||[]).join(', '))+'">';
-  h+='<div class="row" style="justify-content:flex-end;margin-top:6px"><button class="btn" onclick="savePrefLists()">Save lists</button></div>';
-  h+='<h3 style="margin-top:16px">Rules</h3>';
+  h+='<h3 style="margin-top:16px">Opciones y listas de prendas <span class="muted" style="font-size:12px">(separar con comas)</span></h3>';
+  h+='<label>Opciones de almidón</label><input id="set_starch" value="'+esc((S().starch||[]).join(', '))+'">';
+  h+='<label>Opciones de pantalones</label><input id="set_pants" value="'+esc((S().pants||[]).join(', '))+'">';
+  h+='<label>Opciones de manchas</label><input id="set_spotting" value="'+esc((S().spotting||[]).join(', '))+'">';
+  h+='<label>Colores de las prendas</label><input id="set_colors" value="'+esc((S().colors||[]).join(', '))+'">';
+  h+='<label>Estampados y patrones</label><input id="set_patterns" value="'+esc((S().patterns||[]).join(', '))+'">';
+  h+='<div class="row" style="justify-content:flex-end;margin-top:6px"><button class="btn" onclick="savePrefLists()">Guardar listas</button></div>';
+  h+='<h3 style="margin-top:16px">Reglas de operación</h3>';
   h+='<div class="grid2">'+
-    '<div><label>Split bag size</label><input id="set_split" type="number" value="'+S().splitSize+'"></div>'+
+    '<div><label>Piezas por bolsa dividida</label><input id="set_split" type="number" value="'+S().splitSize+'"></div>'+
     '<div><label>Lavado y secado (MXN/kg)</label><input id="set_wf" type="number" step="0.01" value="'+S().washFoldRate+'"></div>'+
-    '<div><label>W&amp;F one-load flat $</label><input id="set_wfload" type="number" step="0.5" value="'+(S().washFoldLoad!=null?S().washFoldLoad:30)+'"></div>'+
-    '<div><label>Promise days</label><input id="set_promise" type="number" value="'+S().promiseDays+'"></div>'+
-    '<div><label>Rush days</label><input id="set_rush" type="number" value="'+S().rushDays+'"></div>'+
-    '<div><label>Statement day (1-28)</label><input id="set_bill" type="number" value="'+S().billingDay+'"></div>'+
-    '<div><label>⛔ Stop deliveries when an account is overdue</label><input id="set_hold" type="number" min="0" value="'+(S().acctHoldDays!=null?S().acctHoldDays:'')+'" placeholder="off"><div class="help" style="margin-top:2px">Days past due before the route refuses an account customer. <b>Blank or 0 = never</b> — deliver and keep billing, whatever they owe (the default).</div></div>'+
-    '<div><label>Default rack mode</label><select id="set_rack"><option value="last2" '+(S().rackMode==='last2'?'selected':'')+'>Phone last-2</option><option value="abc" '+(S().rackMode==='abc'?'selected':'')+'>ABC by last name</option><option value="manual" '+(S().rackMode==='manual'?'selected':'')+'>Manual</option></select></div>'+
-    '<div><label>Reminder days</label><input id="set_remind" value="'+esc((S().reminderDays||[]).join(', '))+'"></div>'+
-    '<div><label>Storage-fee days</label><input id="set_storaged" value="'+esc((S().storageDays||[]).join(', '))+'"></div>'+
-    '<div><label>Storage fee %</label><input id="set_storagepct" type="number" value="'+(S().storagePct||10)+'"></div>'+
-    '<div><label>Free spotting seconds (then '+money(stainUnit())+'/min)</label><input id="set_stain" type="number" value="'+(S().stainSeconds||60)+'"></div>'+
-    '<div><label>🎒 Auto-close bags</label><div class="row" style="gap:8px;align-items:center"><label style="margin:0"><input type="checkbox" id="set_acon" '+(((S().autoClose||{}).on)?'checked':'')+' style="width:auto"> on at</label><input id="set_actime" type="time" value="'+esc((S().autoClose||{}).time||'21:00')+'" style="width:auto"></div><div class="help" style="margin-top:2px">End-of-day backstop — auto-closes each store group left open.</div></div>'+
+    '<div><label>Precio fijo por carga ($ MXN)</label><input id="set_wfload" type="number" step="0.5" value="'+(S().washFoldLoad!=null?S().washFoldLoad:30)+'"></div>'+
+    '<div><label>Días para la entrega</label><input id="set_promise" type="number" value="'+S().promiseDays+'"></div>'+
+    '<div><label>Días para servicio urgente</label><input id="set_rush" type="number" value="'+S().rushDays+'"></div>'+
+    '<div><label>Día de corte de cuentas (1-28)</label><input id="set_bill" type="number" value="'+S().billingDay+'"></div>'+
+    '<div><label>⛔ Suspender entregas de cuentas vencidas</label><input id="set_hold" type="number" min="0" value="'+(S().acctHoldDays!=null?S().acctHoldDays:'')+'" placeholder="off"><div class="help" style="margin-top:2px">Días de atraso antes de suspender el reparto. <b>Vacío o 0 = no suspender</b>; se permite entregar y seguir cobrando.</div></div>'+
+    '<div><label>Forma de asignar estantes</label><select id="set_rack"><option value="last2" '+(S().rackMode==='last2'?'selected':'')+'>Últimos 2 dígitos del teléfono</option><option value="abc" '+(S().rackMode==='abc'?'selected':'')+'>Orden alfabético por apellido</option><option value="manual" '+(S().rackMode==='manual'?'selected':'')+'>Manual</option></select></div>'+
+    '<div><label>Días para recordatorios</label><input id="set_remind" value="'+esc((S().reminderDays||[]).join(', '))+'"></div>'+
+    '<div><label>Días para aplicar almacenaje</label><input id="set_storaged" value="'+esc((S().storageDays||[]).join(', '))+'"></div>'+
+    '<div><label>Cargo por almacenaje (%)</label><input id="set_storagepct" type="number" value="'+(S().storagePct||10)+'"></div>'+
+    '<div><label>Segundos gratuitos para tratar manchas (después '+money(stainUnit())+'/min)</label><input id="set_stain" type="number" value="'+(S().stainSeconds||60)+'"></div>'+
+    '<div><label>🎒 Cierre automático de bolsas</label><div class="row" style="gap:8px;align-items:center"><label style="margin:0"><input type="checkbox" id="set_acon" '+(((S().autoClose||{}).on)?'checked':'')+' style="width:auto"> activo a las</label><input id="set_actime" type="time" value="'+esc((S().autoClose||{}).time||'21:00')+'" style="width:auto"></div><div class="help" style="margin-top:2px">Al finalizar el día, cierra automáticamente los grupos de bolsas abiertos.</div></div>'+
   '</div>';
-  h+='<div class="row" style="justify-content:flex-end;margin-top:6px"><button class="btn green" onclick="saveRules()">Save rules</button></div>';
+  h+='<div class="row" style="justify-content:flex-end;margin-top:6px"><button class="btn green" onclick="saveRules()">Guardar reglas</button></div>';
   h+=cardSettingsHTML();
   h+=(SINGLE_PC?singlePcNoTextingHtml():smsSettingsHTML());
   // data safety / cloud backup
@@ -20733,18 +20733,18 @@ function adminSettings(){
   h+='<p>Loaded from: <b>'+(window.__dataSource==='main'?'primary':window.__dataSource||'primary')+'</b>'+(window.__recovered?' <span class="pill ready">recovered ↻</span>':' <span class="pill asm">healthy</span>')+'<br>Last local save: <b>'+fmtS(window.__lastSave)+'</b> · Last cloud push: <b>'+fmtS(cl.lastPush||window.__cloudAt)+'</b></p>';
   h+='<div class="row"><button class="btn" onclick="cloudPush(\'manual\');saveDB();toast(\'☁ Pushed to cloud\');go(\'admin\',{tab:\'settings\'})">☁ Push to cloud now</button><button class="back" onclick="if(confirm(\'Restore the last cloud snapshot? This replaces current local data.\')){ if(cloudRestore()){location.reload();} else toast(\'No cloud snapshot yet\'); }">↻ Restore from cloud</button></div>';
   }
-  h+='<h3 style="margin-top:18px">💾 Export my data <span class="muted" style="font-size:12px">(own it, move it)</span></h3>';
+  h+='<h3 style="margin-top:18px">💾 Exportar mis datos <span class="muted" style="font-size:12px">(conserva y traslada tus datos)</span></h3>';
   if(isOwner()){
-    h+='<p class="help">Files land in this computer\'s <b>Downloads</b> folder. The <b>full backup</b> is the whole shop in one file — keep copies somewhere safe (this edition has no one-click restore; see its README). The <b>spreadsheets</b> open in Excel — for the accountant, or for moving to any other system.</p>';
+    h+='<p class="help">Los archivos se guardan en <b>Descargas</b>. El <b>respaldo completo</b> contiene toda la información; guárdalo en un lugar seguro. Esta edición aún no restaura archivos con un clic. Los <b>CSV</b> se abren en Excel.</p>';
     h+='<div class="row" style="flex-wrap:wrap;gap:8px">'+
-      '<button class="btn green" onclick="exportFullJSON()">⬇ Full backup (everything)</button>'+
-      '<button class="btn" onclick="exportCSV(\'customers\')">⬇ Customers</button>'+
-      '<button class="btn" onclick="exportCSV(\'orders\')">⬇ Orders</button>'+
-      '<button class="btn" onclick="exportCSV(\'items\')">⬇ Order items</button>'+
-      '<button class="btn" onclick="exportCSV(\'payments\')">⬇ Payments</button>'+
-      '<button class="btn" onclick="exportCSV(\'ledger\')">⬇ A/R ledger</button></div>';
-  } else h+='<p class="muted">🔒 Exports are owner-only.</p>';
-  h+='<div class="row" style="margin-top:18px"><button class="btn red" onclick="if(confirm(\'Erase ALL data and reload sample data?\')){localStorage.removeItem(KEY);localStorage.removeItem(BKEY);localStorage.removeItem(CKEY);location.reload();}">↺ Reset demo data</button></div>';
+      '<button class="btn green" onclick="exportFullJSON()">⬇ Respaldo completo</button>'+
+      '<button class="btn" onclick="exportCSV(\'customers\')">⬇ Clientes</button>'+
+      '<button class="btn" onclick="exportCSV(\'orders\')">⬇ Pedidos</button>'+
+      '<button class="btn" onclick="exportCSV(\'items\')">⬇ Artículos de pedidos</button>'+
+      '<button class="btn" onclick="exportCSV(\'payments\')">⬇ Pagos</button>'+
+      '<button class="btn" onclick="exportCSV(\'ledger\')">⬇ Movimientos de cuentas</button></div>';
+  } else h+='<p class="muted">🔒 Solo el propietario puede exportar datos.</p>';
+  h+='<div class="row" style="margin-top:18px"><button class="btn red" onclick="if(confirm(\'¿Borrar TODOS los datos y volver a cargar la demostración?\')){localStorage.removeItem(KEY);localStorage.removeItem(BKEY);localStorage.removeItem(CKEY);location.reload();}">↺ Restablecer datos de demostración</button></div>';
   return h;
 }
 /* 💾 OWN YOUR DATA — owner-only exports (Settings → Export my data). Full JSON = a restorable copy of
@@ -20853,7 +20853,7 @@ function numList(v){ return (v||'').split(',').map(x=>parseInt(x.trim(),10)).fil
 /* @storage */
 function savePrefLists(){ if(!can('settings')){ denyMsg(); return; } const s=S(); s.starch=strList(val('set_starch')); s.pants=strList(val('set_pants')); s.spotting=strList(val('set_spotting')); s.colors=strList(val('set_colors')); s.patterns=strList(val('set_patterns')); saveDB(); toast('Lists saved'); go('admin',{tab:'settings'}); }
 /* @storage */
-function saveRules(){ if(!can('settings')){ denyMsg(); return; } const s=S(); s.splitSize=Math.max(1,Number(val('set_split'))||5); s.washFoldRate=Number(val('set_wf'))||0; s.washFoldLoad=Number(val('set_wfload'))||30; s.promiseDays=Math.max(0,Number(val('set_promise'))||7); s.rushDays=Math.max(0,Number(val('set_rush'))||1); s.billingDay=Math.min(28,Math.max(1,Number(val('set_bill'))||1)); s.acctHoldDays=Math.max(0,Number(val('set_hold'))||0); s.rackMode=val('set_rack'); s.reminderDays=numList(val('set_remind')); s.storageDays=numList(val('set_storaged')); s.storagePct=Number(val('set_storagepct'))||0; s.stainSeconds=Math.max(5,Number(val('set_stain'))||60); var _ac=document.getElementById('set_acon'); s.autoClose={on:!!(_ac&&_ac.checked), time:(val('set_actime')||'21:00')}; s._t=hlcNow(); saveDB(); toast('Rules saved'); go('admin',{tab:'settings'}); }
+function saveRules(){ if(!can('settings')){ denyMsg(); return; } const s=S(); s.splitSize=Math.max(1,Number(val('set_split'))||5); s.washFoldRate=Number(val('set_wf'))||0; s.washFoldLoad=Number(val('set_wfload'))||30; s.promiseDays=Math.max(0,Number(val('set_promise'))||7); s.rushDays=Math.max(0,Number(val('set_rush'))||1); s.billingDay=Math.min(28,Math.max(1,Number(val('set_bill'))||1)); s.acctHoldDays=Math.max(0,Number(val('set_hold'))||0); s.rackMode=val('set_rack'); s.reminderDays=numList(val('set_remind')); s.storageDays=numList(val('set_storaged')); s.storagePct=Number(val('set_storagepct'))||0; s.stainSeconds=Math.max(5,Number(val('set_stain'))||60); var _ac=document.getElementById('set_acon'); s.autoClose={on:!!(_ac&&_ac.checked), time:(val('set_actime')||'21:00')}; s._t=hlcNow(); saveDB(); toast('Reglas guardadas'); go('admin',{tab:'settings'}); }
 /* @store */
 function editStore(id){ if(!can('settings')){ denyMsg(); return; } const s=id?storeById(id):{name:'',zip:'',tax:0.095};
   modal('<h2>'+(id?'Edit store':'Add store')+'</h2><label>Name</label><input id="snm" value="'+esc(s.name)+'" placeholder="e.g. Riverside">'+
