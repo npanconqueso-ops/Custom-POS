@@ -13,7 +13,7 @@
 | [Manual Single-PC](../../single-pc/README.md) | Instalación, NIP, respaldo, pedidos y limitaciones | Español |
 | [Plan de adaptación](../../single-pc/ADAPTACION-MX.md) | Objetivos, cambios, riesgos y avances en México | Español |
 | [Glosario de pantallas](GLOSARIO-LAVANDERIA.md) | Vocabulario estándar y términos de cobro por kilo/pieza | Español |
-| [Impuestos y precios](IMPUESTOS-MX.md) | Reglas a validar para MXN, IVA y CFDI | Español |
+| [Impuestos y precios](IMPUESTOS-MX.md) | Reglas a validar para MXN, IVA y CFDI | Español |\n| [Guía fiscal del motor genérico](GUIA-IMPUESTOS-MOTOR.md) | Traducción de TAX-GUIDE.md; no confundir con Single-PC | Español |\n| [Referencia técnica Ozark](REFERENCIA-OZARK.md) | Arquitectura, pruebas y lecciones de la aplicación original | Español |
 | [Manual en inglés](../../single-pc/README.en.md) | Referencia original fiel del proveedor | Inglés |
 
 ## Documentos técnicos del proyecto original
@@ -31,11 +31,11 @@ La siguiente relación conserva los enlaces a las fuentes inglesas. **Los enlace
 | Launch Kit | Material de lanzamiento | [docs/LAUNCH-KIT.md](../LAUNCH-KIT.md) |
 | Module Library | Módulos disponibles | [docs/MODULE-LIBRARY.md](../MODULE-LIBRARY.md) |
 | Ozark Parity | Comparación con la app original | [docs/OZARK-PARITY-ROADMAP.md](../OZARK-PARITY-ROADMAP.md) |
-| Ozark Reference | Implementación de referencia | [docs/OZARK-REFERENCE.md](../OZARK-REFERENCE.md) |
+| Ozark Reference | [Traducción al español](REFERENCIA-OZARK.md) | [Original](../OZARK-REFERENCE.md) |
 | Payments Module | Integración de pagos | [docs/PAYMENTS-MODULE.md](../PAYMENTS-MODULE.md) |
 | Phase 2 | Sustrato técnico de segunda fase | [docs/PHASE-2-SUBSTRATE.md](../PHASE-2-SUBSTRATE.md) |
 | Restaurant Vertical | Funciones para restaurantes | [docs/RESTAURANT-VERTICAL.md](../RESTAURANT-VERTICAL.md) |
-| Tax Guide | Impuestos configurables del motor general | [docs/TAX-GUIDE.md](../TAX-GUIDE.md) |
+| Tax Guide | [Traducción al español](GUIA-IMPUESTOS-MOTOR.md) | [Original](../TAX-GUIDE.md) |
 | Templates | Plantillas por comercio | [docs/TEMPLATES.md](../TEMPLATES.md) |
 | The Model | Modelo de componentes | [docs/THE-MODEL.md](../THE-MODEL.md) |
 | V2 Modular Import | Importación modular de la versión 2 | [docs/V2-MODULAR-IMPORT.md](../V2-MODULAR-IMPORT.md) |
