@@ -13,7 +13,7 @@
 | [Manual Single-PC](../../single-pc/README.md) | Instalación, NIP, respaldo, pedidos y limitaciones | Español |
 | [Plan de adaptación](../../single-pc/ADAPTACION-MX.md) | Objetivos, cambios, riesgos y avances en México | Español |
 | [Glosario de pantallas](GLOSARIO-LAVANDERIA.md) | Vocabulario estándar y términos de cobro por kilo/pieza | Español |
-| [Impuestos y precios](IMPUESTOS-MX.md) | Reglas a validar para MXN, IVA y CFDI | Español |\n| [Guía fiscal del motor genérico](GUIA-IMPUESTOS-MOTOR.md) | Traducción de TAX-GUIDE.md; no confundir con Single-PC | Español |\n| [Referencia técnica Ozark](REFERENCIA-OZARK.md) | Arquitectura, pruebas y lecciones de la aplicación original | Español |
+| [Impuestos y precios](IMPUESTOS-MX.md) | Reglas a validar para MXN, IVA y CFDI | Español |\n| [Guía fiscal del motor genérico](GUIA-IMPUESTOS-MOTOR.md) | Traducción de TAX-GUIDE.md; no confundir con Single-PC | Español |\n| [Referencia técnica Ozark](REFERENCIA-OZARK.md) | Arquitectura, pruebas y lecciones de la aplicación original | Español |\n| [Guía de contribución](../../CONTRIBUTING.es.md) | Principios y forma de colaborar | Español |\n| [Manual de la referencia](../../reference/ozark-pos/README.es.md) | Origen y pruebas del POS original | Español |
 | [Manual en inglés](../../single-pc/README.en.md) | Referencia original fiel del proveedor | Inglés |
 
 ## Documentos técnicos del proyecto original
@@ -40,7 +40,7 @@ La siguiente relación conserva los enlaces a las fuentes inglesas. **Los enlace
 | The Model | Modelo de componentes | [docs/THE-MODEL.md](../THE-MODEL.md) |
 | V2 Modular Import | Importación modular de la versión 2 | [docs/V2-MODULAR-IMPORT.md](../V2-MODULAR-IMPORT.md) |
 | Worker Rights | Funciones laborales estadounidenses | [docs/WORKER-RIGHTS.md](../WORKER-RIGHTS.md) |
-| Contributing | Guía de contribución | [CONTRIBUTING.md](../../CONTRIBUTING.md) |
+| Contributing | [Traducción al español](../../CONTRIBUTING.es.md) | [Original](../../CONTRIBUTING.md) |
 | Journal | Bitácora técnica y decisiones históricas | [JOURNAL.md](../../JOURNAL.md) |
 | Go Live | Despliegue del sitio original (no del fork) | [GO-LIVE.md](../../GO-LIVE.md) |
 | Payments README | Servicio de cobros | [payments/README.md](../../payments/README.md) |
