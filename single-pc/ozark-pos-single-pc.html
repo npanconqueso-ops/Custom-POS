@@ -9,7 +9,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Ozark POS">
+<meta name="apple-mobile-web-app-title" content="Lavandería POS MX">
 <style>
   :root{
     --blue:#1f5fa8; --blue-dark:#17487f; --bg:#eef1f5; --card:#fff; --line:#d7dde6;
@@ -4699,12 +4699,12 @@ function uid(){ return Math.random().toString(36).slice(2,9); }
 function money(n){ return '$'+(Number(n)||0).toFixed(2); }
 /* ---- print templates: defaults merged with saved overrides ---- */
 var PRINT_DEFAULTS={
-  receipt:{label:'🧾 Receipt / Ticket',header:'YOUR CLEANERS',tagline:'',footer:'Thank you!',width:32,fontPx:13,copies:1,showLogo:true,showStore:true,showPromise:true,showPhone:true,showBarcode:true,showPrices:true},
-  bag:{label:'👜 Bag / split ticket',header:'YOUR CLEANERS',tagline:'',footer:'',width:32,fontPx:13,copies:1,showLogo:true,showStore:true,showPromise:true,showPhone:false,showBarcode:true,showPrices:true},
-  quote:{label:'🧮 Quote',header:'YOUR CLEANERS — QUOTE',tagline:'',footer:'Estimate only — thank you!',width:30,fontPx:13,showLogo:true},
-  statement:{label:'📑 Statement',header:'YOUR CLEANERS — STATEMENT',tagline:'',footer:'Please remit. Thank you!',width:30,fontPx:13,showLogo:true},
-  manifest:{label:'🚚 Route manifest',header:'ROUTE MANIFEST',tagline:'',footer:'',width:42,fontPx:13,showLogo:true},
-  priceList:{label:'📋 Price list',header:'YOUR CLEANERS — PRICE LIST',tagline:'',footer:'Prices subject to change. Sales tax added at checkout.',width:40,fontPx:13,showLogo:true}
+  receipt:{label:'🧾 Recibo / ticket',header:'TU LAVANDERÍA',tagline:'',footer:'¡Gracias por tu preferencia!',width:32,fontPx:13,copies:1,showLogo:true,showStore:true,showPromise:true,showPhone:true,showBarcode:true,showPrices:true},
+  bag:{label:'👜 Ticket de bolsa',header:'TU LAVANDERÍA',tagline:'',footer:'',width:32,fontPx:13,copies:1,showLogo:true,showStore:true,showPromise:true,showPhone:false,showBarcode:true,showPrices:true},
+  quote:{label:'🧮 Cotización',header:'TU LAVANDERÍA — COTIZACIÓN',tagline:'',footer:'Cotización sujeta a confirmación.',width:30,fontPx:13,showLogo:true},
+  statement:{label:'📑 Estado de cuenta',header:'TU LAVANDERÍA — ESTADO DE CUENTA',tagline:'',footer:'Gracias por tu pago.',width:30,fontPx:13,showLogo:true},
+  manifest:{label:'🚚 Lista de reparto',header:'LISTA DE REPARTO',tagline:'',footer:'',width:42,fontPx:13,showLogo:true},
+  priceList:{label:'📋 Lista de precios',header:'TU LAVANDERÍA — PRECIOS',tagline:'',footer:'Precios sujetos a cambios. Confirmar impuestos al cobrar.',width:40,fontPx:13,showLogo:true}
 };
 /* @print @settings — the print settings for ONE document type, defaults merged under whatever the shop has changed -- so a per-document tweak never has to be repeated at a call site. */
 function PC(doc){ var d=PRINT_DEFAULTS[doc]||{}; var cfg=(S().print&&S().print[doc])||{}; return Object.assign({},d,cfg); }
@@ -7289,16 +7289,16 @@ function wfTicketText(o){
   var c=cust(o.customerId)||{}; var st=storeById(o.storeId)||{name:'',zip:''}; var cfg=PC('bag'); var W=Math.max(20,cfg.width||32);
   var wfs=(o.lines||[]).filter(function(x){return x.wf;}); var kg=0,price=0,note=''; wfs.forEach(function(l){ kg+=Number(l.wfKg)||0; price+=Number(l.price)||0; if(l.wfNote&&!note) note=l.wfNote; });
   var rate=S().washFoldRate||0; kg=Math.round(kg*10)/10; price=Math.round(price*100)/100;
-  var r=centerLine('LAVADO Y SECADO',W)+'\n'+centerLine('SHOP TICKET',W)+'\n';
+  var r=centerLine('LAVADO Y SECADO',W)+'\n'+centerLine('TICKET INTERNO',W)+'\n';
   if(cfg.showStore!==false) r+=centerLine((String(st.name).split('–')[1]||st.name||'').trim(),W)+'\n';
   r+=rep('=',W)+'\n';
   r+='Order: '+o.number+'\n'+((c.first||'')+' '+(c.last||'')).trim()+'  '+fmtPhone(c.phone)+'\n';
   if(c.route&&String(c.route).trim()) r+='DELIVERY: '+String(c.route).trim()+'\n';
-  r+='Promise: '+o.promise+'\n'+rep('-',W)+'\n';
-  r+='Peso:  ' +kg+' lb  @ '+money(rate)+'/kg\n';
-  r+='Price:   '+money(price)+'\n';
+  r+='Entrega: '+fmtDate(o.promise)+'\n'+rep('-',W)+'\n';
+  r+='Peso: '+kg+' kg @ '+money(rate)+'/kg\n';
+  r+='Precio:  '+money(price)+'\n';
   if(note) r+=rep('-',W)+'\n'+wrapCenter(note,W);
-  r+=rep('-',W)+'\n'+centerLine('^ scan to rack / pick up ^',W)+'\n';
+  r+=rep('-',W)+'\n'+centerLine('^ escanear para ubicar ^',W)+'\n';
   return r;
 }
 /* 🧺 THE W&F FINISH (owner 2026-08-28: "after we detail the total poundage... the invoice should print
@@ -7310,25 +7310,25 @@ function wfTicketText(o){
 function wfRackAsk(oid){ var o=order(oid); if(!o) return; var c=cust(o.customerId)||{};
   var wfs=(o.lines||[]).filter(function(x){return x.wf;}); var kg=0,price=0; wfs.forEach(function(l){ kg+=Number(l.wfKg)||0; price+=Number(l.price)||0; });
   /* owner 2026-08-28: W&F is ALWAYS a hand-typed rack spot — no auto-suggestion, it has its own shelf area */
-  modal('<div style="text-align:center"><div style="font-size:38px">🧺</div><h2 style="margin:.2em 0">Lavado y secado — where is it going?</h2>'+
+  modal('<div style="text-align:center"><div style="font-size:38px">🧺</div><h2 style="margin:.2em 0">Lavado y secado — ¿dónde se guardará?</h2>'+
     '<p class="muted" style="margin:0 0 8px">'+esc(o.number)+' · '+esc(((c.first||'')+' '+(c.last||'')).trim())+' · <b>'+(Math.round(kg*10)/10)+' kg</b> · '+money(Math.round(price*100)/100)+'</p></div>'+
-    '<label>Rack location <span style="color:#c0392b">*</span></label><input id="wfrack" value="" placeholder="e.g. W12" autocomplete="off" onkeydown="if(event.key===&quot;Enter&quot;){event.preventDefault();wfRackGo(&quot;'+oid+'&quot;);}">'+
-    '<div class="row mid" style="margin-top:12px"><button class="btn green big" onclick="wfRackGo(&quot;'+oid+'&quot;)">📍 Rack it — mark Ready &amp; print the invoice</button></div>'+
-    '<div class="row mid" style="margin-top:6px"><button class="back" style="font-size:12.5px" onclick="wfSlipOnly(&quot;'+oid+'&quot;)">🧼 Not washed yet — keep it Detailed, print the shop slip</button></div>');
+    '<label>Ubicación en estante <span style="color:#c0392b">*</span></label><input id="wfrack" value="" placeholder="e.g. W12" autocomplete="off" onkeydown="if(event.key===&quot;Enter&quot;){event.preventDefault();wfRackGo(&quot;'+oid+'&quot;);}">'+
+    '<div class="row mid" style="margin-top:12px"><button class="btn green big" onclick="wfRackGo(&quot;'+oid+'&quot;)">📍 Guardar, marcar listo e imprimir</button></div>'+
+    '<div class="row mid" style="margin-top:6px"><button class="back" style="font-size:12.5px" onclick="wfSlipOnly(&quot;'+oid+'&quot;)">🧼 Sin lavar todavía — conservar detalle e imprimir ticket interno</button></div>');
   var el=document.getElementById('wfrack'); if(el){ el.focus(); try{ el.select(); }catch(e){} } }
 /* @detail @rack — commit the W&F finish: location REQUIRED (markReady refuses junk), invoice prints AFTER Ready so the ticket shows the true state. */
 function wfRackGo(oid){ var o=order(oid); if(!o) return; var loc=(val('wfrack')||'').trim();
-  if(!rackLocReal(loc)){ toast('⚠ Enter a real rack spot — Ready has to say where the clothes are'); var el=document.getElementById('wfrack'); if(el) el.focus(); return; }
+  if(!rackLocReal(loc)){ toast('⚠ Ingresa una ubicación válida para la ropa'); var el=document.getElementById('wfrack'); if(el) el.focus(); return; }
   setRackLoc(o,loc,{mode:'locOnly'});
   markReady(o);   /* THE gate: saves, stamps, logs Rack/Ready, and the ready-text rules (route / opt-in / still-processing) all apply */
-  if(o.status!=='Ready'){ toast('⚠ Could not mark Ready — check the rack spot'); return; }   /* markReady refused → do not print an invoice claiming otherwise */
+  if(o.status!=='Ready'){ toast('⚠ No fue posible marcarlo como listo; revisa la ubicación'); return; }   /* markReady refused → do not print an invoice claiming otherwise */
   closeModal();
   try{ printBagInvoice(o,null,{noHB:true}); }catch(e){}
   logEvent('W&F final invoice', o.number+' @ '+loc);
-  toast('🧺 Ready @ '+loc+' — invoice printing'); go('home'); }
+  toast('🧺 Listo en '+loc+' — imprimiendo ticket'); go('home'); }
 /* @detail @print — the OLD path, kept on purpose: a bag weighed before washing stays Detailed and gets the shop slip for the bundle. */
 function wfSlipOnly(oid){ closeModal(); var o=order(oid); if(!o) return;
-  try{ printWFTicket(oid); }catch(e){} logEvent('W&F ticket printed', o.number); toast('🧺 Detailed ✓ — shop slip printing'); go('home'); }
+  try{ printWFTicket(oid); }catch(e){} logEvent('W&F ticket printed', o.number); toast('🧺 Detallado ✓ — imprimiendo ticket interno'); go('home'); }
 /* @print */
 function printWFTicket(oid){ var o=order(oid); if(!o) return; var cfg=PC('bag'); var top='<div style="text-align:center;margin:1mm 0 2mm">'+code128Svg(o.number,52)+   /* 🏷 Code 128, same symbology the agent prints (owner 2026-08-28: the old barcodes do not scan) */'<div style="font-family:\'Courier New\',monospace;font-size:13px;font-weight:700">'+esc(o.number)+'</div></div>'; printRaw(wfTicketText(o), cfg.width||32, cfg.fontPx||13, cfg.copies||1, false, top, o.storeId, ''); }   // routes to the order's store printer on the assembly PC (colored paper), else the print box
 
@@ -16597,7 +16597,7 @@ function quoteText(){ const cfg=PC('quote'); const W=Math.max(22,cfg.width||28);
     const p=priceItem(ql.priceId); if(!p)return; let upSum=0; (ql.upcharges||[]).forEach(u=>upSum+=Number(u.amt)||0); const lt=(p.price+upSum)*ql.qty; sub+=lt; t+=padR(ql.qty+'x '+p.name,NW)+padL(money(lt),7)+'\n'; if(ql.upcharges&&ql.upcharges.length) t+='   + '+ql.upcharges.map(u=>u.name).join(', ')+'\n'; });
   const tax=sub*rate; t+=rep('-',W)+'\n'+padR('Subtotal',NW)+padL(money(sub),7)+'\n'+padR('Tax '+(rate*100).toFixed(2)+'%',NW)+padL(money(tax),7)+'\n'+padR('TOTAL',NW)+padL(money(sub+tax),7)+'\n'+rep('=',W)+'\n'+(cfg.footer?centerLine(cfg.footer,W):''); return t; }
 /* @print */
-function printQuote(){ const t=quoteText(); receiptModal('Quote', t, 'quote'); }
+function printQuote(){ const t=quoteText(); receiptModal('Cotización', t, 'quote'); }
 /* @storage */
 function exportCustomersCSV(){ if(!can('customers')){ denyMsg(); return; } logEvent('Customer export', DB.customers.length+' customers downloaded (CSV) · by '+(empName()||'—')); let csv='First,Last,Phone,Email,MainStore,Account,Balance,Credit,Route,TotalSpent\n';
   DB.customers.forEach(c=>{ let spent=0; DB.orders.filter(o=>o.customerId===c.id&&o.status==='PickedUp').forEach(o=>spent+=computeTotals(o).total); csv+=['"'+c.first+'"','"'+c.last+'"',c.phone,c.email||'',(storeById(c.mainStore)||{}).name||'',c.isAccount?'Y':'N',(c.balance||0).toFixed(2),(c.credit||0).toFixed(2),'"'+(c.route||'')+'"',spent.toFixed(2)].join(',')+'\n'; });
