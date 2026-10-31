@@ -4,7 +4,7 @@
 
 > **Traducción de la documentación original de Ozark POS, adaptada al proyecto mexicano.** La aplicación en la rama `desarrollo-mx` sigue en desarrollo y todavía conserva textos sin traducir. **No debe utilizarse con clientes, cobros o pedidos reales** hasta que se prueben los procesos de ventas, impresión y restauración de respaldos.
 >
-> [Leer el manual original en inglés](README.en.md) · [Plan técnico para México](ADAPTACION-MX.md)
+> [Leer el manual original en inglés](README.en.md) · [Plan técnico para México](ADAPTACION-MX.md) · [Instalación y pruebas funcionales](GUIA-PRUEBAS-MX.md)
 
 Este punto de venta se utilizó en una tintorería real que tenía dos establecimientos. Permitía recibir ropa, identificarla con etiquetas, procesarla, preparar lotes, almacenarla para su entrega, registrar cuentas de clientes, operar una ruta y llevar control del personal. El negocio original lo utilizó de junio a septiembre de 2026. El 30 de septiembre de 2026 migró a su sistema sucesor para varias computadoras y esta edición quedó congelada. En lugar de retirarla, sus creadores la publicaron como un único archivo HTML ejecutable localmente.
 
