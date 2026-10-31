@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es-MX">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Ozark POS — Single-PC Edition</title>
+<title>Lavandería POS MX — Versión de prueba</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2712%27 fill=%27%231f5fa8%27/%3E%3Ctext x=%2732%27 y=%2744%27 font-size=%2734%27 text-anchor=%27middle%27 fill=%27white%27 font-family=%27Arial%27%3EP%3C/text%3E%3C/svg%3E">
 <meta name="theme-color" content="#1f5fa8">
 <meta name="mobile-web-app-capable" content="yes">
@@ -4962,7 +4962,7 @@ function seed(){
     ["Wet Press","Wet Press","Shirt (wet press)",4.15,1],["Wet Press","Wet Press","Shirt XXL (wet press)",4.41,1],["Wet Press","Wet Press","Pants (wet press)",7.72,1],
     ["Wet Press","Wet Press","Pants XXL 40+ (wet press)",8.24,1],["Wet Press","Wet Press","Shorts (wet press)",7.72,1],["Wet Press","Wet Press","Skirt (wet press)",6.67,1],
     ["Wet Press","Wet Press","Overalls (wet press)",10.13,1],["Wet Press","Wet Press","Cargo (wet press)",8.93,1],
-    ["Wash 'n fold","Wash 'n fold","Wash & Fold (per lb)",2.75,1],
+    ["Wash 'n fold","Wash 'n fold","Lavado y secado (por kg)",2.75,1],
     ["Wash 'n fold","Wash 'n fold","Wash & Dry - 1 load",27.56,1]
   ];
   const prices=rawPrices.map(r=>({id:uid(),service:r[0],cat:r[1],name:r[2],price:r[3],pieces:r[4],taxable:true,rack:rackRuleFor(r[0],r[1],r[2]),warn:r[5]||''}));
@@ -6802,9 +6802,9 @@ function quickNav(e){
     if(hi<matches.length) pickCustomer(matches[hi].id); else newCustomerPrompt(); }
 }
 /* @input @render — ten digits to (501) 555-0123. Anything that is not exactly ten digits comes back untouched rather than mangled, because a number a human is still halfway through typing must not be rewritten under them. */
-function fmtPhone(p){ p=(p||'').replace(/\D/g,''); return p.length===10?'('+p.slice(0,3)+') '+p.slice(3,6)+'-'+p.slice(6):p; }
+function fmtPhone(p){ p=(p||'').replace(/\D/g,''); return p.length===10?p.slice(0,2)+' '+p.slice(2,6)+' '+p.slice(6):p; }
 /* @input @render — an ISO date to the US order a person reads. ⚠️ String surgery on purpose -- parsing to a Date first would shift the day by a timezone, which is how a sale has already been reported on the wrong DAY. */
-function fmtDate(d){ if(!d) return ''; var s=String(d).slice(0,10).split('-'); return s.length===3?(s[1]+'-'+s[2]+'-'+s[0]):String(d); }   // ISO YYYY-MM-DD → US MM-DD-YYYY
+function fmtDate(d){ if(!d) return ''; var s=String(d).slice(0,10).split('-'); return s.length===3?(s[2]+'/'+s[1]+'/'+s[0]):String(d); }   // ISO YYYY-MM-DD → US MM-DD-YYYY
 
 /* @input @customer — Title Case a typed name, including after an apostrophe or a hyphen, so it reads the way a person would have written it. */
 function titleName(s){ return String(s==null?'':s).toLowerCase().replace(/(^|[\s'\-])([a-z])/g,function(m,p,ch){ return p+ch.toUpperCase(); }); }   // auto-capitalize names: "donald o'brien-smith" → "Donald O'Brien-Smith"
@@ -7000,7 +7000,7 @@ function renderQuickForm(){
     '<div class="grid3">'+
       '<div><label>① 👕 Press</label><input id="qpress" type="number" min="0" inputmode="numeric" placeholder="0" onfocus="this.select()"></div>'+
       '<div><label>② 🏠 Household</label><input id="qhh" type="number" min="0" inputmode="numeric" placeholder="0" onfocus="this.select()"></div>'+
-      '<div><label>③ 🧺 Wash &amp; Fold (qty 1)</label><input id="qwf" type="number" min="0" max="1" inputmode="numeric" placeholder="0" onfocus="this.select()"></div>'+
+      '<div><label>③ 🧺 Lavado y secado (qty 1)</label><input id="qwf" type="number" min="0" max="1" inputmode="numeric" placeholder="0" onfocus="this.select()"></div>'+
     '</div>'+
     '<div class="grid2">'+
       '<div><label style="cursor:pointer;display:block"><input type="checkbox" id="qrush" style="width:auto" '+(c.noRushCharge?'checked ':'')+'onchange="updatePromise()"> ⚡ Rush'+(c.noRushCharge?' (free for this customer)':' (adds Rush charge)')+'</label>'+
@@ -7078,7 +7078,7 @@ function createOrder(cid){
   const press=Math.max(0,Number(val('qpress'))||0);
   const hh=Math.max(0,Number(val('qhh'))||0);
   let wf=Math.max(0,Number(val('qwf'))||0); if(wf>1) wf=1;   // W&F qty is always 1
-  if(press+hh+wf<=0){ alert('Enter a quantity:  1 = Press · 2 = Household · 3 = Wash & Fold'); return; }
+  if(press+hh+wf<=0){ alert('Enter a quantity:  1 = Press · 2 = Household · 3 = Lavado y secado'); return; }
   const rushEl=document.getElementById('qrush'); const isRush=(!!(rushEl&&rushEl.checked) || !!(c&&c.noRushCharge)) && (!custIsRoute(c) || atCounter);   // ⚡ free-rush customers are always rush; route orders are never "rush" (they deliver on the Wed run)
   const altEl=document.getElementById('qalt'); const isAlt=!!(altEl&&altEl.checked);
   const isHappy=(custIsRoute(c) && !atCounter);   // 🎒 route orders are always happy bags. The counter's own checkbox is gone (owner 8/08) — the "📦 Happy Bag" button above starts one directly, so there is one control, not two.
@@ -7100,8 +7100,8 @@ function createOrder(cid){
   if(press>0) mk('press',press,'Press');           // wet + dry combine into ONE press ticket
   if(hh>0) mk('household',hh,'Household');           // household = its own ticket
   if(wf>0){                                          // wash & fold = its own ticket (weighed at detail)
-    const wfItem=DB.prices.find(p=>p.rack==='manual'); const o=mk('washfold',1,'Wash & Fold');
-    o.lines=[{id:uid(),priceId:wfItem?wfItem.id:null,desc:'Wash & Fold — weigh at detail',upcharges:[],price:0,assembled:false,bag:null,wf:true}];
+    const wfItem=DB.prices.find(p=>p.rack==='manual'); const o=mk('washfold',1,'Lavado y secado');
+    o.lines=[{id:uid(),priceId:wfItem?wfItem.id:null,desc:'Lavado y secado — weigh at detail',upcharges:[],price:0,assembled:false,bag:null,wf:true}];
   }
   saveDB();
   logEvent('Quick', created.map(o=>o.number+' ('+(o.kind==='washfold'?'W&F':o.pieceCount+'pc')+')').join(', ')+(isRush?' RUSH':'')+(isAlt?' ✂ALT':''));
@@ -7275,27 +7275,27 @@ function combinedCustomerText(ids){
   r+=(c.first||'')+' '+(c.last||'')+(cfg.showPhone!==false?'  '+fmtPhone(c.phone):'')+'\n';
   var pr={}; ids.forEach(function(id){ pr[order(id).promise]=1; });
   r+='Promise: '+Object.keys(pr).map(fmtDate).join(', ')+'\n'+rep('-',W)+'\n';
-  ids.forEach(function(id){ var o=order(id); if(o.kind==='washfold'){ r+='Wash & Fold (weighed at detail)\n'; } else { var n=o.quickCount||o.pieceCount||o.lines.length; r+=(o.pressType||o.kind)+': '+n+' piece'+(n===1?'':'s')+'\n'; } });   // piece count per category, one ticket
+  ids.forEach(function(id){ var o=order(id); if(o.kind==='washfold'){ r+='Lavado y secado (weighed at detail)\n'; } else { var n=o.quickCount||o.pieceCount||o.lines.length; r+=(o.pressType||o.kind)+': '+n+' piece'+(n===1?'':'s')+'\n'; } });   // piece count per category, one ticket
   r+=rep('-',W)+'\n';
   r+=wrapCenter(SINGLE_PC?'Ask for your total at pickup.':('We will text your total to '+(c.phone?fmtPhone(c.phone):'you')+' when your order is ready.'),W);
   if(cfg.footer) r+=centerLine(cfg.footer,W)+'\n';
   if(S().bibleVerse!==false){ var bv=bibleVerse(ids.join('-')); if(bv){ r+=rep('-',W)+'\n'+wrapCenter('"'+bv.t+'"',W)+centerLine('- '+bv.r,W)+'\n'; } }   // verse OK on the customer quick receipt (if the setting is on)
   return r;
 }
-/* 🧺 Wash & Fold shop ticket — printed when the bag is detailed (weighed). Goes on the folded bundle:
+/* 🧺 Lavado y secado shop ticket — printed when the bag is detailed (weighed). Goes on the folded bundle:
    customer, order #, weight × rate, price, any notes, promise, + a scannable order barcode for rack/pickup. */
 /* @print */
 function wfTicketText(o){
   var c=cust(o.customerId)||{}; var st=storeById(o.storeId)||{name:'',zip:''}; var cfg=PC('bag'); var W=Math.max(20,cfg.width||32);
-  var wfs=(o.lines||[]).filter(function(x){return x.wf;}); var lbs=0,price=0,note=''; wfs.forEach(function(l){ lbs+=Number(l.wfLbs)||0; price+=Number(l.price)||0; if(l.wfNote&&!note) note=l.wfNote; });
-  var rate=S().washFoldRate||0; lbs=Math.round(lbs*10)/10; price=Math.round(price*100)/100;
-  var r=centerLine('WASH & FOLD',W)+'\n'+centerLine('SHOP TICKET',W)+'\n';
+  var wfs=(o.lines||[]).filter(function(x){return x.wf;}); var kg=0,price=0,note=''; wfs.forEach(function(l){ kg+=Number(l.wfKg)||0; price+=Number(l.price)||0; if(l.wfNote&&!note) note=l.wfNote; });
+  var rate=S().washFoldRate||0; kg=Math.round(kg*10)/10; price=Math.round(price*100)/100;
+  var r=centerLine('LAVADO Y SECADO',W)+'\n'+centerLine('SHOP TICKET',W)+'\n';
   if(cfg.showStore!==false) r+=centerLine((String(st.name).split('–')[1]||st.name||'').trim(),W)+'\n';
   r+=rep('=',W)+'\n';
   r+='Order: '+o.number+'\n'+((c.first||'')+' '+(c.last||'')).trim()+'  '+fmtPhone(c.phone)+'\n';
   if(c.route&&String(c.route).trim()) r+='DELIVERY: '+String(c.route).trim()+'\n';
   r+='Promise: '+o.promise+'\n'+rep('-',W)+'\n';
-  r+='Weight:  '+lbs+' lb  @ '+money(rate)+'/lb\n';
+  r+='Peso:  ' +kg+' lb  @ '+money(rate)+'/kg\n';
   r+='Price:   '+money(price)+'\n';
   if(note) r+=rep('-',W)+'\n'+wrapCenter(note,W);
   r+=rep('-',W)+'\n'+centerLine('^ scan to rack / pick up ^',W)+'\n';
@@ -7308,10 +7308,10 @@ function wfTicketText(o){
    before washing, because a screen must never dead-end (8/12). */
 /* @detail @rack @print — the W&F finish: rack spot in, Ready through the one gate, FULL invoice out. */
 function wfRackAsk(oid){ var o=order(oid); if(!o) return; var c=cust(o.customerId)||{};
-  var wfs=(o.lines||[]).filter(function(x){return x.wf;}); var lbs=0,price=0; wfs.forEach(function(l){ lbs+=Number(l.wfLbs)||0; price+=Number(l.price)||0; });
+  var wfs=(o.lines||[]).filter(function(x){return x.wf;}); var kg=0,price=0; wfs.forEach(function(l){ kg+=Number(l.wfKg)||0; price+=Number(l.price)||0; });
   /* owner 2026-08-28: W&F is ALWAYS a hand-typed rack spot — no auto-suggestion, it has its own shelf area */
-  modal('<div style="text-align:center"><div style="font-size:38px">🧺</div><h2 style="margin:.2em 0">Wash &amp; Fold — where is it going?</h2>'+
-    '<p class="muted" style="margin:0 0 8px">'+esc(o.number)+' · '+esc(((c.first||'')+' '+(c.last||'')).trim())+' · <b>'+(Math.round(lbs*10)/10)+' lb</b> · '+money(Math.round(price*100)/100)+'</p></div>'+
+  modal('<div style="text-align:center"><div style="font-size:38px">🧺</div><h2 style="margin:.2em 0">Lavado y secado — where is it going?</h2>'+
+    '<p class="muted" style="margin:0 0 8px">'+esc(o.number)+' · '+esc(((c.first||'')+' '+(c.last||'')).trim())+' · <b>'+(Math.round(kg*10)/10)+' kg</b> · '+money(Math.round(price*100)/100)+'</p></div>'+
     '<label>Rack location <span style="color:#c0392b">*</span></label><input id="wfrack" value="" placeholder="e.g. W12" autocomplete="off" onkeydown="if(event.key===&quot;Enter&quot;){event.preventDefault();wfRackGo(&quot;'+oid+'&quot;);}">'+
     '<div class="row mid" style="margin-top:12px"><button class="btn green big" onclick="wfRackGo(&quot;'+oid+'&quot;)">📍 Rack it — mark Ready &amp; print the invoice</button></div>'+
     '<div class="row mid" style="margin-top:6px"><button class="back" style="font-size:12.5px" onclick="wfSlipOnly(&quot;'+oid+'&quot;)">🧼 Not washed yet — keep it Detailed, print the shop slip</button></div>');
@@ -7374,14 +7374,14 @@ function renderDetail(){
        '<div class="row" style="margin-top:6px;align-items:center"><span style="font-weight:700;font-size:18px">$</span><input id="altprice" type="number" min="0" step="0.25" value="'+(_altAmt||'')+'" placeholder="0.00" style="width:120px;font-size:16px"><button class="btn" onclick="setAlterationPrice(\''+oid+'\',val(\'altprice\'))">Save price</button>'+(_altAmt>0?'<span class="pill asm">set '+money(_altAmt)+'</span>':'<span class="pill ready">not set yet</span>')+'</div>'+
        '<div class="help" style="margin-top:4px">Shows on the ticket &amp; the Alterations report. Not taxed (separately-itemized labor).</div></div>'; }
   var _wfIdx=(o.lines||[]).findIndex(function(l){return l.wf;});
-  if(o.kind==='washfold' && _wfIdx>=0){   // 🧺 Wash & Fold has NO heat-seals — you just weigh the bag. Show a big weight box instead of the scan box.
+  if(o.kind==='washfold' && _wfIdx>=0){   // 🧺 Lavado y secado has NO heat-seals — you just weigh the bag. Show a big weight box instead of the scan box.
     var _wl=o.lines[_wfIdx], _rate=S().washFoldRate||0;
     h+='<div style="background:#eef6ff;border:2px solid #1666b0;border-radius:10px;padding:14px;margin:8px 0">'+
-       '<div style="font-weight:800;font-size:17px;color:#1666b0;margin-bottom:8px">🧺 Wash &amp; Fold — weigh the bag &amp; enter the weight</div>'+
+       '<div style="font-weight:800;font-size:17px;color:#1666b0;margin-bottom:8px">🧺 Lavado y secado — weigh the bag &amp; enter the weight</div>'+
        '<div class="row" style="align-items:center;gap:10px;flex-wrap:wrap">'+
-         '<input id="wfw" type="number" step="0.1" min="0" value="'+(_wl.wfLbs||'')+'" placeholder="lb" style="font-size:26px;font-weight:800;padding:10px 12px;width:150px" autofocus onkeydown="if(event.key===\'Enter\')saveWFInline(\''+o.id+'\','+_wfIdx+')"><span style="font-size:18px">lb &nbsp;×&nbsp; '+money(_rate)+'/lb</span>'+
-         '<button class="btn green big" onclick="saveWFInline(\''+o.id+'\','+_wfIdx+')">Save weight ▶</button>'+
-         '<span style="font-size:22px;font-weight:800;margin-left:auto">'+(_wl.wfLbs?money(_wl.price||0):'—')+'</span>'+
+         '<input id="wfw" type="number" step="0.1" min="0" value="'+(_wl.wfKg||'')+'" placeholder="kg" style="font-size:26px;font-weight:800;padding:10px 12px;width:150px" autofocus onkeydown="if(event.key===\'Enter\')saveWFInline(\''+o.id+'\','+_wfIdx+')"><span style="font-size:18px">kg &nbsp;×&nbsp; '+money(_rate)+'/kg</span>'+
+         '<button class="btn green big" onclick="saveWFInline(\''+o.id+'\','+_wfIdx+')">Guardar peso ▶</button>'+
+         '<span style="font-size:22px;font-weight:800;margin-left:auto">'+(_wl.wfKg?money(_wl.price||0):'—')+'</span>'+
        '</div>'+
        '<div class="row" style="align-items:center;gap:8px;margin-top:8px;padding-top:8px;border-top:1px dashed #bcd8f5"><span class="muted" style="font-weight:700">OR</span>'+
          '<button class="'+(_wl.wfLoad?'btn green':'btn')+'" onclick="saveWFLoad(\''+o.id+'\','+_wfIdx+')">🧺 Wash &amp; Dry — ONE LOAD · '+money(S().washFoldLoad!=null?S().washFoldLoad:30)+' flat (no weighing)</button>'+
@@ -7404,7 +7404,7 @@ function renderDetail(){
   });
   const qc=(o.quickCount!=null?o.quickCount:o.pieceCount);
   h+='<div class="row" style="justify-content:space-between;align-items:center;margin-top:6px;flex-wrap:wrap;gap:8px"><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="back" onclick="addDetailPiece(\''+o.id+'\')">➕ Add a piece</button><button class="back" onclick="bulkAddItems(\''+o.id+'\')">📦 Bulk add (no tags)</button><button class="back" onclick="newDetailOrder(\''+o.customerId+'\')">🆕 New separate order</button>'+
-     ((o.uncounted && o.kind!=='washfold' && !(o.lines||[]).some(function(l){return l.priceId||l.hsl;}))?'<button class="btn" style="background:#2e8b57" onclick="detailBagIsWF(\''+o.id+'\')">🧺 Whole bag is Wash &amp; Fold</button>':'')+'</div>'+
+     ((o.uncounted && o.kind!=='washfold' && !(o.lines||[]).some(function(l){return l.priceId||l.hsl;}))?'<button class="btn" style="background:#2e8b57" onclick="detailBagIsWF(\''+o.id+'\')">🧺 Whole bag is Lavado y secado</button>':'')+'</div>'+
      '<span class="'+((o.lines.length!==qc&&!o.uncounted)?'pill ready':'muted')+'" style="font-size:13px">'+(o.uncounted?'📦 '+esc(o.pressType||'Order')+' · '+o.lines.length+' detailed':'Quick counted <b>'+qc+'</b> · now <b>'+o.lines.length+'</b> detailed'+(o.lines.length!==qc?' ⚠ check':''))+'</span></div>';
   // order upcharges
   h+=asmReminderPanel(o.id);
@@ -7967,7 +7967,7 @@ function detailLine(oid,i,editAll){
     window.__dlEditAll = !!(editAll || (l.hsl&&validHsl(l.hsl)&&l.priceId&&l.color&&l.pattern)
                             || (l.hsl&&validHsl(l.hsl)&&garmentByHsl(l.hsl))); }   // 🔧 an already-DETAILED or already-KNOWN piece opens as an all-fields editable view, NOT the step-by-step wizard
   window.__dlOid=oid; window.__dlIdx=i;   // remember the open piece so the F12 "advance" key knows what to move
-  if(l.wf){ modal('<h2>🧺 Wash & Fold</h2><label>Weight (lb) — '+money(S().washFoldRate)+'/lb</label><input id="dlw" type="number" step="0.1" value="'+(l.wfLbs||'')+'">'+
+  if(l.wf){ modal('<h2>🧺 Lavado y secado</h2><label>Peso (kg) — '+money(S().washFoldRate)+'/kg</label><input id="dlw" type="number" step="0.1" value="'+(l.wfKg||'')+'">'+
     '<div class="row end"><button class="back" onclick="closeModal()">Cancel</button><button class="btn green" onclick="saveWF(\''+oid+'\','+i+')">Save</button></div>'); return; }
   const pi=l.priceId?priceItem(l.priceId):null; const press=pi?(/wet/i.test(pi.service)?'wet':'dry'):null;
   const known=l.hsl?garmentByHsl(l.hsl):null;
@@ -8313,30 +8313,30 @@ function filterItems(){ var si=document.getElementById('itemSearch'); var q=(si?
   Array.prototype.forEach.call(document.querySelectorAll('#itemPick .pickgroup'),function(g){ var any=Array.prototype.some.call(g.querySelectorAll('.pickitem'),function(b){return b.style.display!=='none';}); g.style.display=any?'':'none'; });
 }
 /* @storage */
-function saveWF(oid,i){ const o=order(oid); const l=o.lines[i]; const lb=Number(val('dlw'))||0; l.wfLbs=lb; l.price=Math.round(lb*S().washFoldRate*100)/100; l.desc=lb+' lb Wash & Fold'; if(o) o._t=hlcNow(); saveDB(); closeModal(); go('detail',{orderId:oid}); }
-/* 🧺 A route Happy Bag that turns out to be WASH & FOLD: no piece counting — flip the order into the real
-   W&F flow (same shape Quick creates), then the big weight box + $/lb pricing + the printed W&F shop ticket
+function saveWF(oid,i){ const o=order(oid); const l=o.lines[i]; const lb=Number(val('dlw'))||0; l.wfKg=lb; l.price=Math.round(lb*S().washFoldRate*100)/100; l.desc=lb+' kg Lavado y secado'; if(o) o._t=hlcNow(); saveDB(); closeModal(); go('detail',{orderId:oid}); }
+/* 🧺 A route Happy Bag that turns out to be LAVADO Y SECADO: no piece counting — flip the order into the real
+   W&F flow (same shape Quick creates), then the big weight box + $/kg pricing + the printed W&F shop ticket
    all take over. Only offered while the bag is untouched (nothing detailed yet); a MIXED bag = detail the
    press pieces here and put the W&F part on a 🆕 New separate order instead. */
 /* @detail */
 function detailBagIsWF(oid){ var o=order(oid); if(!o) return; if(o.kind==='washfold'){ go('detail',{orderId:oid}); return; }
   if((o.lines||[]).some(function(l){ return l.priceId||l.hsl; })){ toast('This bag already has detailed pieces — use 🆕 New separate order for the W&F part'); return; }
-  if(!confirm('🧺 Turn '+o.number+' into a Wash & Fold ticket?\n\nNo piece counting — just weigh the bag. It prices at '+money(S().washFoldRate||2.75)+'/lb and prints the W&F shop ticket when you finish.')) return;
-  var wfItem=DB.prices.find(function(p){ return p.rack==='manual'; });   // the per-lb Wash & Fold price-book item (same lookup Quick uses)
-  o.kind='washfold'; o.pressType='Wash & Fold'; o.uncounted=false; o.pieceCount=1; o.quickCount=1; o.happyBag=false;
-  o.lines=[{id:uid(),priceId:wfItem?wfItem.id:null,desc:'Wash & Fold — weigh at detail',upcharges:[],price:0,assembled:false,bag:null,wf:true}];   // bag was untouched (guard above) — only blank placeholders could exist here
-  o.comments=((o.comments||'')?o.comments+' · ':'')+'was a Happy Bag — contents are Wash & Fold';   // mark the history, never erase it
-  o._t=hlcNow(); saveDB(); logEvent('Happy Bag → Wash & Fold', o.number+' — weigh at detail');
-  toast('🧺 '+o.number+' is now Wash & Fold — enter the weight'); go('detail',{orderId:oid}); }
+  if(!confirm('🧺 Turn '+o.number+' into a Lavado y secado ticket?\n\nNo piece counting — just weigh the bag. It prices at '+money(S().washFoldRate||2.75)+'/kg and prints the W&F shop ticket when you finish.')) return;
+  var wfItem=DB.prices.find(function(p){ return p.rack==='manual'; });   // the per-kg Lavado y secado price-book item (same lookup Quick uses)
+  o.kind='washfold'; o.pressType='Lavado y secado'; o.uncounted=false; o.pieceCount=1; o.quickCount=1; o.happyBag=false;
+  o.lines=[{id:uid(),priceId:wfItem?wfItem.id:null,desc:'Lavado y secado — weigh at detail',upcharges:[],price:0,assembled:false,bag:null,wf:true}];   // bag was untouched (guard above) — only blank placeholders could exist here
+  o.comments=((o.comments||'')?o.comments+' · ':'')+'was a Happy Bag — contents are Lavado y secado';   // mark the history, never erase it
+  o._t=hlcNow(); saveDB(); logEvent('Happy Bag → Lavado y secado', o.number+' — weigh at detail');
+  toast('🧺 '+o.number+' is now Lavado y secado — enter the weight'); go('detail',{orderId:oid}); }
 /* 🧺 inline weight entry straight from the detail screen (no modal) — set lbs, compute price, re-render */
 /* @detail — save a wash-and-fold weight without leaving the screen. */
-function saveWFInline(oid,i){ var o=order(oid); if(!o) return; var l=o.lines[i]; if(!l) return; var lb=Math.round((Number(val('wfw'))||0)*10)/10; var note=clean((val('wfnote')||'').trim()); if(lb<=0){ toast('Enter the weight in pounds'); var e=document.getElementById('wfw'); if(e) e.focus(); return; } l.wf=true; delete l.wfLoad; l.wfLbs=lb; l.wfNote=note; l.price=Math.round(lb*(S().washFoldRate||0)*100)/100; l.desc=lb+' lb Wash & Fold'+(note?' — '+note:''); o._t=hlcNow(); saveDB(); logEvent('Wash & Fold weight', o.number+' · '+lb+' lb · '+money(l.price)+(note?' · '+note:'')); toast('🧺 '+lb+' lb · '+money(l.price)); go('detail',{orderId:oid}); }   /* entering a weight switches a one-load pick back to per-lb */
+function saveWFInline(oid,i){ var o=order(oid); if(!o) return; var l=o.lines[i]; if(!l) return; var lb=Math.round((Number(val('wfw'))||0)*10)/10; var note=clean((val('wfnote')||'').trim()); if(lb<=0){ toast('Ingresa el peso en kilogramos'); var e=document.getElementById('wfw'); if(e) e.focus(); return; } l.wf=true; delete l.wfLoad; l.wfKg=lb; l.wfNote=note; l.price=Math.round(lb*(S().washFoldRate||0)*100)/100; l.desc=lb+' kg Lavado y secado'+(note?' — '+note:''); o._t=hlcNow(); saveDB(); logEvent('Lavado y secado weight', o.number+' · '+lb+' kg · '+money(l.price)+(note?' · '+note:'')); toast('🧺 '+lb+' kg · '+money(l.price)); go('detail',{orderId:oid}); }   /* entering a weight switches a one-load pick back to per-lb */
 /* @money @press — the flat one-load option (owner 2026-09-15): no scale, one price from settings. */
 function saveWFLoad(oid,i){ var o=order(oid); if(!o) return; var l=o.lines[i]; if(!l) return;
   var amt=Math.round((Number(S().washFoldLoad!=null?S().washFoldLoad:30))*100)/100;
   var note=clean((val('wfnote')||'').trim());
-  l.wf=true; l.wfLoad=true; delete l.wfLbs; l.wfNote=note; l.price=amt; l.desc='Wash & Dry — one load'+(note?' — '+note:'');
-  o._t=hlcNow(); saveDB(); logEvent('Wash & Fold one-load', o.number+' · '+money(amt)+' flat'+(note?' · '+note:''));
+  l.wf=true; l.wfLoad=true; delete l.wfKg; l.wfNote=note; l.price=amt; l.desc='Wash & Dry — one load'+(note?' — '+note:'');
+  o._t=hlcNow(); saveDB(); logEvent('Lavado y secado one-load', o.number+' · '+money(amt)+' flat'+(note?' · '+note:''));
   toast('🧺 One load · '+money(amt)); go('detail',{orderId:oid}); }
 /* @garment @scan — find whose garment a heat-seal tag belongs to. */
 function hslLookup(oid,i,code){ const o=order(oid); const l=o.lines[i]; captureDetail(l); l.hsl=(code||'').trim(); if(window.__dlE) window.__dlE.hsl=0;
@@ -8987,7 +8987,7 @@ function prefOffClear(l,id){ if(!l||!l.prefOff) return; l.prefOff=l.prefOff.filt
    customer and applies itself, so the counter stops having to remember which 15 people out of 4,925 want it.
 
    ⚠️ IT READS BOTH FACTS OFF pieceStation(), which is the rule the four press stations are already grouped
-   by: 'WT' 'WP' 'DT' 'DP' or '' for Wash & Fold and household. First letter W = wet press, which is the only
+   by: 'WT' 'WP' 'DT' 'DP' or '' for Lavado y secado and household. First letter W = wet press, which is the only
    place starch is applied at all — a dry-clean piece must never carry it, because it would be billing for work
    no station performs, and the chip is already hidden there. Second letter P = bottoms. Reading one existing
    answer instead of writing a second regex is the whole reason this cannot drift away from the press floor,
@@ -9540,7 +9540,7 @@ function finishDetail(oid){
   if(o.lines.length!==qc && !o.uncounted){ if(!confirm('⚠ Piece-count check\n\nQuick Receive counted '+qc+' piece(s), but '+o.lines.length+' have been detailed.\n\nPlease double-check that nothing was missed or added. Continue with '+o.lines.length+' piece(s)?')) return; }   // uncounted/Happy bags legitimately start at 0
   if(o.lines.some(l=>!l.priceId)){ if(!confirm('Some pieces have no item type yet. Continue anyway?')) return; }
   const noHsl=o.lines.filter(l=>!l.wf&&!l.noHsl&&(!l.hsl||!validHsl(l.hsl))).length; if(noHsl){ if(!confirm('⚠ '+noHsl+' piece(s) have no valid heat-seal (must be 8 digits starting with 1 or 2). Fix them first, or continue anyway?')) return; }   // 📦 no-tag (bulk/linen) pieces are exempt — they're assembled by the order ticket, not per-piece scans
-  const noWt=o.lines.filter(l=>l.wf&&!(Number(l.wfLbs)>0)).length; if(noWt){ if(!confirm('🧺 '+noWt+' Wash & Fold bag(s) have no weight entered yet (that would be $0). Enter the weight first, or continue anyway?')) return; }   // W&F needs a weight or it prices at $0
+  const noWt=o.lines.filter(l=>l.wf&&!(Number(l.wfKg)>0)).length; if(noWt){ if(!confirm('🧺 '+noWt+' Lavado y secado bag(s) have no weight entered yet (that would be $0). Enter the weight first, or continue anyway?')) return; }   // W&F needs a weight or it prices at $0
   if(o.alterations){ var _alt=(o.orderUpcharges||[]).filter(u=>/alterat/i.test(u.name||'')).reduce((s,u)=>s+(Number(u.amt)||0),0); var _la=(o.lines||[]).some(l=>(l.upcharges||[]).some(u=>/alterat/i.test(u.name||''))); if(_alt===0 && !_la){ if(!confirm('✂ This is an ALTERATIONS order, but no alteration price was entered. Continue without it?')) return; } }
   o.status='Detailed'; o._t=hlcNow(); saveDB(); logEvent('Detail', o.number);
   if(o.kind==='washfold'){ wfRackAsk(oid); return; }   // 🧺 owner 2026-08-28: after the poundage is detailed, ask for a rack spot, mark it Ready, and print the FULL invoice — the little shop slip stays available behind the "not washed yet" button
@@ -9663,7 +9663,7 @@ function assembleOne(oid){
   const done=o.lines.filter(l=>asmOnBoard(l)).length;
   h+='<p><b>'+done+' / '+o.lines.length+'</b> scanned in'+(done<o.lines.length?' <span class="pill ready">⚠ '+(o.lines.length-done)+' still out</span>':' <span class="pill asm">✓ all in</span>')+'</p>';
   o.lines.forEach((l,i)=>{ const pi=l.priceId?priceItem(l.priceId):null;
-    if(l.wf){ h+='<div class="list-item" style="cursor:pointer" onclick="detailLine(\''+oid+'\','+i+',1)" title="Tap to edit"><div style="flex:1"><b>Piece '+(i+1)+'</b> · 🧺 Wash &amp; Fold <span class="muted" style="font-size:12px">✏️ tap</span></div>'+(l.assembled?'<span class="pill asm">✓ in</span>':'<span class="pill ready">not yet</span>')+'</div>'; return; }
+    if(l.wf){ h+='<div class="list-item" style="cursor:pointer" onclick="detailLine(\''+oid+'\','+i+',1)" title="Tap to edit"><div style="flex:1"><b>Piece '+(i+1)+'</b> · 🧺 Lavado y secado <span class="muted" style="font-size:12px">✏️ tap</span></div>'+(l.assembled?'<span class="pill asm">✓ in</span>':'<span class="pill ready">not yet</span>')+'</div>'; return; }
     h+='<div class="list-item" style="cursor:pointer" onclick="detailLine(\''+oid+'\','+i+',1)" title="Tap to see or fix how this piece was detailed"><div style="flex:1"><b>Piece '+(i+1)+'</b> · '+(pi?esc(pi.name):'<span style="color:#c0392b">⚠ not detailed</span>')+(l.hsl?' <span class="muted">🏷 '+esc(l.hsl)+'</span>':'')+' <span class="muted" style="font-size:12px">✏️ tap to edit</span></div>'+
        (l.assembled?'<span class="pill asm">✓ scanned in'+(l.bag?' · '+esc(l.bag):'')+'</span>':'<span class="pill ready">not yet</span>')+'<div style="white-space:nowrap" onclick="event.stopPropagation()">'+(o.lines.length>1?' <button class="back" style="padding:2px 8px;font-size:12px" title="Split this piece off to its own ticket" onclick="splitOrderOne(\''+oid+'\','+i+')">✂️</button>':'')+'</div></div>'; });
   if(o.splits&&o.splits.length){   // 🖨 one button PER BAG — tap it to print just that bag's ticket (the 3 pullovers, or the quilt on its own). Was a row of dead chips + a print-them-all button, so there was no way to reprint a single bag.
@@ -12409,7 +12409,7 @@ function receiptText(o,c,split,quick){
   const st=storeById(o.storeId); const t=computeTotals(o);
   let lines=o.lines; let head=o.number;
   if(split){ lines=split.lineIdx.map(i=>o.lines[i]); head=split.number; }
-  /* 🧾 A DROP-OFF TICKET HIDES PRICES ONLY WHILE THERE IS NO PRICE YET (Bianca, 2026-09-10: a Wash & Fold
+  /* 🧾 A DROP-OFF TICKET HIDES PRICES ONLY WHILE THERE IS NO PRICE YET (Bianca, 2026-09-10: a Lavado y secado
      ticket "prints tax free... the invoice has to be gone into and pulled thru history"). The intake ticket
      was suppressing the total UNCONDITIONALLY — right for a garment order priced later at detail, WRONG for a
      W&F she already weighed and priced at the counter: the customer's own ticket then showed no money and she
@@ -12456,7 +12456,7 @@ function receiptText(o,c,split,quick){
   var _rems=[]; if((c.reminder||'').trim()) _rems.push('CUSTOMER: '+c.reminder.trim()); (o.asmReminders||[]).forEach(function(rm){ if(!rm.done && (rm.text||'').trim()) _rems.push(rm.text.trim()); });   // 🔔 reminders (customer + assembly) — printed & initialed on the ticket
   if(_rems.length){ r+=rep('*',W)+'\n'+centerLine('** REMINDERS **',W)+'\n'; _rems.forEach(function(rt){ wrapL(rt,W-2).split('\n').filter(Boolean).forEach(function(ln,i){ r+=(i===0?'! ':'  ')+ln+'\n'; }); r+='   initial: ______\n'; }); r+=rep('*',W)+'\n'; }
   r+=rep('-',W)+'\n';
-  if(_drop){ if(o.kind==='washfold'){ r+='Wash & Fold (weighed at detail)\n'; } else { var _pc=o.quickCount||o.pieceCount||lines.length; r+=(o.pressType?o.pressType+' · ':'')+_pc+' piece'+(_pc===1?'':'s')+'\n'; } }
+  if(_drop){ if(o.kind==='washfold'){ r+='Lavado y secado (weighed at detail)\n'; } else { var _pc=o.quickCount||o.pieceCount||lines.length; r+=(o.pressType?o.pressType+' · ':'')+_pc+' piece'+(_pc===1?'':'s')+'\n'; } }
   else { lines.forEach(l=>{ const pi=l.priceId?priceItem(l.priceId):null; const nm=(pi?pi.name:(l.happyBag?'Happy Bag (no charge)':(((l.desc||'').trim())||'(piece)'))); r+= showP ? (padR(nm,NW)+padL(money(lineTotal(l)),7)+'\n') : (nm.slice(0,W)+'\n');   // 🧾 a MANUAL line (no price-book item) prints WHAT WAS TYPED — it printed "(piece)" and the invoice went out with no words on it (owner report 7/29, Regional napkins)
     var _cp=[l.color||'',l.pattern||''].filter(Boolean).join(' '); var _dl=[_cp,(l.hsl?'HSL '+l.hsl:'')].filter(Boolean).join(' · '); if(_dl){ wrapL(_dl,W-2).split('\n').filter(Boolean).forEach(function(_ln){ r+='  '+_ln+'\n'; }); }   // 🎨 color · pattern · HSL# under each item
     if(showP){ var _ups=(l.upcharges||[]).filter(function(u){ var d=DB.upcharges.find(function(x){return x.id===u.id;}); return !(d&&d.auto); }).map(function(u){ return (u.name||'')+(u.qty>1?' x'+u.qty:''); }).filter(Boolean).join(', '); if(_ups){ wrapL(_ups,W-4).split('\n').filter(Boolean).forEach(function(line,idx){ r+=(idx===0?'  + ':'    ')+line+'\n'; }); } }   // upcharges per item, comma-separated (the line total above already includes their price)
@@ -16525,12 +16525,12 @@ function renderQuote(){
   h+='<input id="itemSearch" placeholder="🔎 filter items…" oninput="filterItems()" style="margin-bottom:4px">';
   h+='<div id="svChips" style="margin-bottom:4px">'+svChips+'</div>';
   h+='<div id="itemPick" style="max-height:230px;overflow:auto;border:1px solid #d8dee6;border-radius:8px;padding:4px">'+grid+'</div>';
-  /* 🧺 WASH & FOLD ON A QUOTE (Bianca's ticket, 9/28: "need wash and fold options in quote area"). The per-lb item is
+  /* 🧺 LAVADO Y SECADO ON A QUOTE (Bianca's ticket, 9/28: "need wash and fold options in quote area"). The per-lb item is
      kept out of the picker above (rack 'manual' — it is priced by weight, not tapped), so it gets its own row: the same
      two prices Detail offers — by the pound (washFoldRate) or one flat load (washFoldLoad). */
-  h+='<div class="row" style="gap:8px;margin:8px 0 2px;flex-wrap:wrap;align-items:center"><b>🧺 Wash &amp; Fold</b>'+
-     '<input id="qwf" type="number" step="0.1" min="0" placeholder="lb" style="width:90px" onkeydown="if(event.key===\'Enter\')addQuoteWF()">'+
-     '<span class="muted">lb × '+money(quoteWFRate())+'/lb</span>'+
+  h+='<div class="row" style="gap:8px;margin:8px 0 2px;flex-wrap:wrap;align-items:center"><b>🧺 Lavado y secado</b>'+
+     '<input id="qwf" type="number" step="0.1" min="0" placeholder="kg" style="width:90px" onkeydown="if(event.key===\'Enter\')addQuoteWF()">'+
+     '<span class="muted">kg × '+money(quoteWFRate())+'/kg</span>'+
      '<button class="btn" onclick="addQuoteWF()">Add by the pound</button>'+
      '<button class="btn" onclick="addQuoteWFLoad()">One load · '+money(quoteWFLoadAmt())+'</button></div>';
   h+='<div id="quoteLines">'+renderQuoteLines()+'</div>';
@@ -16542,8 +16542,8 @@ function renderQuoteLines(){
   if(!state.quoteLines.length){ h+='<p class="muted" style="margin-top:10px">Tap items above to build the estimate.</p>'; }
   else state.quoteLines.forEach((ql,i)=>{
     if(ql.wf){ const w=quoteWFLine(ql); sub+=w.total;
-      h+='<div class="list-item" style="display:block;margin-top:8px"><div class="row between"><div><b>🧺 '+esc(w.name)+'</b> <span class="muted">'+(ql.load?money(w.each)+' a load':money(quoteWFRate())+'/lb')+'</span></div><div>'+
-        (ql.load?'Loads <input type="number" min="1" value="'+ql.qty+'" style="width:54px" onchange="setQuoteQty('+i+',this.value)">':'lb <input type="number" min="0.1" step="0.1" value="'+ql.lbs+'" style="width:70px" onchange="setQuoteLbs('+i+',this.value)">')+
+      h+='<div class="list-item" style="display:block;margin-top:8px"><div class="row between"><div><b>🧺 '+esc(w.name)+'</b> <span class="muted">'+(ql.load?money(w.each)+' a load':money(quoteWFRate())+'/kg')+'</span></div><div>'+
+        (ql.load?'Loads <input type="number" min="1" value="'+ql.qty+'" style="width:54px" onchange="setQuoteQty('+i+',this.value)">':'kg <input type="number" min="0.1" step="0.1" value="'+ql.kg+'" style="width:70px" onchange="setQuoteKg('+i+',this.value)">')+
         ' <b>'+money(w.total)+'</b> <button class="back" onclick="removeQuoteLine('+i+')">✕</button></div></div></div>';
       return; }
     const p=priceItem(ql.priceId); if(!p) return; const press=/wet/i.test(p.service)?'wet':'dry';
@@ -16568,16 +16568,16 @@ function setQuoteQty(i,v){ if(!state.quoteLines[i])return; state.quoteLines[i].q
 function quoteWFRate(){ return Number(S().washFoldRate)||0; }
 /* @quote @price — the flat one-load price, the same setting (and $30 default) Detail's ONE LOAD button uses. */
 function quoteWFLoadAmt(){ return Math.round(Number(S().washFoldLoad!=null?S().washFoldLoad:30)*100)/100; }
-/* @quote @price — one wash-and-fold quote line, priced exactly as Detail prices it (saveWFInline / saveWFLoad): lb × rate rounded to the cent, or loads × the flat price. */
+/* @quote @price — one wash-and-fold quote line, priced exactly as Detail prices it (saveWFInline / saveWFLoad): kg × rate rounded to the cent, or loads × the flat price. */
 function quoteWFLine(ql){ if(ql.load){ const each=quoteWFLoadAmt(); return {name:'Wash & Dry — one load', print:'Wash & Dry load', each:each, total:Math.round(each*(ql.qty||1)*100)/100}; }   /* print: the slip's name column is ~21 wide and padR cuts, so "2x Wash & Dry — one load" would print cut off */
-  const t=Math.round((Number(ql.lbs)||0)*quoteWFRate()*100)/100, nm=(Number(ql.lbs)||0)+' lb Wash & Fold'; return {name:nm, print:nm, each:t, total:t}; }
+  const t=Math.round((Number(ql.kg)||0)*quoteWFRate()*100)/100, nm=(Number(ql.kg)||0)+' kg Lavado y secado'; return {name:nm, print:nm, each:t, total:t}; }
 /* @quote — add wash and fold by the pound from the weight box; refuses a blank or zero weight rather than quoting $0. */
-function addQuoteWF(){ const lb=Math.round((Number(val('qwf'))||0)*10)/10; if(lb<=0){ toast('Enter the weight in pounds'); const e=document.getElementById('qwf'); if(e) e.focus(); return; }
-  state.quoteLines=state.quoteLines||[]; state.quoteLines.push({wf:true,lbs:lb,qty:1}); const e=document.getElementById('qwf'); if(e) e.value=''; refreshQuoteLines(); }
+function addQuoteWF(){ const lb=Math.round((Number(val('qwf'))||0)*10)/10; if(lb<=0){ toast('Ingresa el peso en kilogramos'); const e=document.getElementById('qwf'); if(e) e.focus(); return; }
+  state.quoteLines=state.quoteLines||[]; state.quoteLines.push({wf:true,kg:lb,qty:1}); const e=document.getElementById('qwf'); if(e) e.value=''; refreshQuoteLines(); }
 /* @quote — add one flat wash-and-fold load; a second tap adds a second load to the same line. */
 function addQuoteWFLoad(){ state.quoteLines=state.quoteLines||[]; const ex=state.quoteLines.find(q=>q.wf&&q.load); if(ex) ex.qty++; else state.quoteLines.push({wf:true,load:true,qty:1}); refreshQuoteLines(); }
 /* @quote — change a by-the-pound line's weight in place. */
-function setQuoteLbs(i,v){ const ql=state.quoteLines[i]; if(!ql||!ql.wf) return; const lb=Math.round((Number(v)||0)*10)/10; if(lb>0) ql.lbs=lb; refreshQuoteLines(); }
+function setQuoteKg(i,v){ const ql=state.quoteLines[i]; if(!ql||!ql.wf) return; const lb=Math.round((Number(v)||0)*10)/10; if(lb>0) ql.kg=lb; refreshQuoteLines(); }
 /* @quote */
 function removeQuoteLine(i){ state.quoteLines.splice(i,1); refreshQuoteLines(); }
 /* @quote */
@@ -16930,7 +16930,7 @@ function statementHTML(c, opts){
   /* ⚠️ "0-piece order" is what a customer used to read on the SPOT-transition tickets, where the whole
      amount sits in an order-level charge and the piece count is genuinely 0. Those are legitimate orders (see
      CLAUDE.md) and the statement must not describe them as nothing. */
-  function dsc(e){ if(e.note) return e.note; var o=order(e.orderId); if(o) return o.kind==='washfold'?'Wash & Fold':o.kind==='express'?'Happy Bag':((o.pieceCount||0)>0?((o.pieceCount||0)+'-piece order'):'Cleaning'); return 'Charge'; }
+  function dsc(e){ if(e.note) return e.note; var o=order(e.orderId); if(o) return o.kind==='washfold'?'Lavado y secado':o.kind==='express'?'Happy Bag':((o.pieceCount||0)>0?((o.pieceCount||0)+'-piece order'):'Cleaning'); return 'Charge'; }
   function ref(e){ var o=order(e.orderId); return o?o.number:''; }
   var rows='';
   /* 💸 PAST DUE — the invoices carried in from earlier months, itemised (owner, 2026-08-18: "make the
@@ -17092,7 +17092,7 @@ function stmtStructured(c,P){
   var newChg=Math.round(pChgs.reduce(function(s,e){return s+(e.amount||0);},0)*100)/100;
   var isClosed=(periodEnd!==Infinity);
   var balDue=isClosed?ledgerBalanceAsOf(c,periodEnd):Math.round((c.balance||0)*100)/100;   /* ⚠️ was its own prevBal+newChg-totPay inline — now the one shared definition ledgerBalanceAsOf also backs stmtBilledBalance, so a closed-period BALANCE DUE can never quietly disagree between the two statement renderers or the A/R Collect screen */
-  function dsc(e){ if(e.note) return e.note; var o=order(e.orderId); if(o) return o.kind==='washfold'?'Wash & Fold':o.kind==='express'?'Happy Bag':((o.pieceCount||0)+'-piece order'); return 'Charge'; }
+  function dsc(e){ if(e.note) return e.note; var o=order(e.orderId); if(o) return o.kind==='washfold'?'Lavado y secado':o.kind==='express'?'Happy Bag':((o.pieceCount||0)+'-piece order'); return 'Charge'; }
   function ref(e){ var o=order(e.orderId); return o?o.number:''; }
   var rows=[];
   if(pPays.length){ rows.push({sec:'Payments'}); pPays.forEach(function(e){ rows.push({date:stmtMDY(e.date),ref:'',desc:e.note||'Payment',amt:-(e.amount||0)}); }); }
@@ -17527,7 +17527,7 @@ function emailAllRun(opts){
 }
 
 /* ============================ 💵 CASH DRAWER ============================ */
-var DENOMS=[['100','$100',100],['50','$50',50],['20','$20',20],['10','$10',10],['5','$5',5],['1','$1',1],['q','25¢ quarter',0.25],['d','10¢ dime',0.10],['n','5¢ nickel',0.05],['p','1¢ penny',0.01]];
+var DENOMS=[['1000','$1,000',1000],['500','$500',500],['200','$200',200],['100','$100',100],['50','$50',50],['20','$20',20],['c20','Moneda $20',20],['c10','Moneda $10',10],['c5','Moneda $5',5],['c2','Moneda $2',2],['c1','Moneda $1',1],['c050','Moneda $0.50',0.5]];
 /* 💵 THE DEPOSIT PUTS THE DRAWER BACK AT ITS FLOAT (owner, 2026-09-23: "the 'cash deposit' amount should always put her
    drawer back at the starting amount, over/short tells us if we are missing money, but is a function to help the drawer
    stay at $200"). Check-out used to pull exactly the day's cash sales and leave whatever was left: a short drawer stayed
@@ -17613,7 +17613,7 @@ function renderDrawer(){
      employee had to scroll to reach the button that closes the drawer, at the one moment of the day when
      miscounting costs money (owner 8/8). Two columns, and it still reflows to one on a narrow screen. */
   h+='<div style="display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start">';
-  [['Bills',0,6],['Coins',6,DENOMS.length]].forEach(function(grp){
+  [['Billetes',0,6],['Monedas',6,DENOMS.length]].forEach(function(grp){
     h+='<div style="flex:1;min-width:236px"><table style="margin:0"><tr><th>'+grp[0]+'</th><th>Qty</th><th class="right">Subtotal</th></tr>';
     DENOMS.slice(grp[1],grp[2]).forEach(function(d,k){ var idx=grp[1]+k; var q=Number(state.drawerCounts[d[0]])||0;
       h+='<tr><td>'+d[1]+'</td><td><input id="dq_'+d[0]+'" type="number" min="0" inputmode="numeric" style="width:78px" value="'+(state.drawerCounts[d[0]]||'')+'" oninput="drawerInput(\''+d[0]+'\',this.value)"'+(idx===0?' autofocus':'')+'></td><td class="right"><span id="dsub_'+d[0]+'">'+money(q*d[2])+'</span></td></tr>'; });
@@ -19293,7 +19293,7 @@ function applyBulk(){ if(!can('prices')){ denyMsg(); return; }
 }
 /* 🔄 Re-price OPEN (not-picked-up) invoices to the CURRENT Price Book.
    Owner-only. Previews every dollar change first; nothing moves until the owner clicks apply.
-   Custom "Describe & Price" lines (no priceId) and Wash & Fold (weight-based) are left untouched.
+   Custom "Describe & Price" lines (no priceId) and Lavado y secado (weight-based) are left untouched.
    Already-paid orders are shown separately and only changed if the owner explicitly includes them. */
 /* @price */
 function _reprChanges(o){
@@ -19319,7 +19319,7 @@ function repriceOpenPreview(){ if(!isOwner()){ denyMsg(); return; }
     list.forEach(function(x){ var c=cust(x.o.customerId)||{}; h+='<tr><td>'+esc(x.o.number)+'</td><td>'+esc(((c.first||'')+' '+(c.last||'')).trim()||'—')+'</td><td>'+esc(x.o.status||'')+'</td><td>'+x.ch.changed.length+'</td><td class="right">'+money(x.ch.oldTotal)+'</td><td class="right"><b>'+money(x.ch.newTotal)+'</b></td><td class="right" style="color:'+(x.ch.delta>=0?'#1e8449':'#c0392b')+'">'+(x.ch.delta>=0?'+':'')+money(x.ch.delta)+'</td></tr>'; });
     return h+'</table></div>'; }
   var h='<h2>🔄 Re-price open orders to the current book</h2>';
-  h+='<p class="help">Copies each item\'s <b>current Price Book</b> price onto open (not-picked-up) invoices. Custom "Describe &amp; Price" pieces and Wash &amp; Fold are left alone. Every change is logged in Activity.</p>';
+  h+='<p class="help">Copies each item\'s <b>current Price Book</b> price onto open (not-picked-up) invoices. Custom "Describe &amp; Price" pieces and Lavado y secado are left alone. Every change is logged in Activity.</p>';
   h+='<div class="panel" style="background:#eef6ff;padding:10px;margin:0"><b>'+unpaid.length+'</b> unpaid order(s) will change · net <b style="color:'+(totU>=0?'#1e8449':'#c0392b')+'">'+(totU>=0?'+':'')+money(totU)+'</b></div>';
   h+=tbl(unpaid);
   if(paid.length){ h+='<div class="panel" style="background:#fff6e5;padding:10px;margin-top:12px">⚠ <b>'+paid.length+'</b> already-paid order(s) would also change (net '+(totP>=0?'+':'')+money(totP)+'). Re-pricing these can leave a new balance the customer owes — usually skip them.</div>'+tbl(paid); }
@@ -20709,7 +20709,7 @@ function adminSettings(){
   h+='<h3 style="margin-top:16px">Rules</h3>';
   h+='<div class="grid2">'+
     '<div><label>Split bag size</label><input id="set_split" type="number" value="'+S().splitSize+'"></div>'+
-    '<div><label>Wash &amp; Fold $/lb</label><input id="set_wf" type="number" step="0.01" value="'+S().washFoldRate+'"></div>'+
+    '<div><label>Lavado y secado (MXN/kg)</label><input id="set_wf" type="number" step="0.01" value="'+S().washFoldRate+'"></div>'+
     '<div><label>W&amp;F one-load flat $</label><input id="set_wfload" type="number" step="0.5" value="'+(S().washFoldLoad!=null?S().washFoldLoad:30)+'"></div>'+
     '<div><label>Promise days</label><input id="set_promise" type="number" value="'+S().promiseDays+'"></div>'+
     '<div><label>Rush days</label><input id="set_rush" type="number" value="'+S().rushDays+'"></div>'+
