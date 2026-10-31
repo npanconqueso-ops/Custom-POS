@@ -45,10 +45,10 @@
 - [x] Crear fork propio.
 - [x] Crear rama `desarrollo-mx`.
 - [x] Registrar alcance y prioridades técnicas.
-- [ ] Confirmar catálogo y modalidad de cobro (kg, pieza o ambas).
-- [ ] Identificar constantes/funciones para moneda, peso, fechas, teléfonos e impuestos.
-- [ ] Crear pruebas de regresión para importes, pagos y conversiones.
-- [ ] Adaptar primero interfaz y unidades, verificando resultados con datos ficticios.
+- [x] Confirmar modalidad de cobro: **kilogramo y pieza**. Tarifas todavía pendientes de cargar.
+- [x] Identificar constantes/funciones para moneda, peso, fechas, teléfonos e impuestos.
+- [x] Incorporar comprobaciones estáticas en `tests/mx-single-pc.js` (pendiente ejecución de CI y pruebas funcionales).\n- [ ] Crear pruebas de regresión para importes, pagos y conversiones.
+- [x] Primer cambio de código: unidades de kilogramos, etiqueta MXN/kg, fechas dd/mm/aaaa, formato telefónico y denominaciones de caja.\n- [ ] Traducir todas las pantallas y verificar resultados con datos ficticios.
 - [ ] Implementar exportación + restauración de respaldo y ensayo de recuperación.
 - [ ] Personalizar tickets y comprobar impresión real.
 - [ ] Piloto controlado antes de operar con clientes reales.
@@ -56,3 +56,11 @@
 ## Nota de uso
 
 El software original es de código abierto con licencia MIT. Esta rama está en desarrollo: no almacenar información real de clientes o ventas hasta superar pruebas de seguridad, cobros y recuperación de datos.
+
+## Avance de código (31-10-2026)
+
+Se modificó `single-pc/ozark-pos-single-pc.html` sobre `desarrollo-mx` para usar `wfKg` en las órdenes nuevas y `kg` en las cotizaciones de lavado por peso. Se adaptaron etiquetas de unidades, fecha, teléfono y denominaciones de efectivo. El catálogo de prendas por pieza ya existía en el software y se conserva.
+
+**Compatibilidad de datos:** los campos originales `wfLbs` / `lbs` **no se convierten automáticamente**. No importar archivos JSON de la edición estadounidense en esta versión. Si fuera necesario, crear primero una migración explícita y verificada. La nueva versión todavía tiene múltiples textos en inglés y precios de demostración estadounidenses. **No usar en producción.**
+
+Se agregó `tests/mx-single-pc.js` para detectar referencias antiguas en rutas críticas; su presencia no demuestra que todas las pruebas se hayan ejecutado. Faltan pruebas de interfaz, operaciones completas, fiscalidad y respaldo/restauración.
